@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>瓜瓜池塘 - 钓鱼收集游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI Emoji", "Microsoft YaHei", sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(180deg, #0a0015 0%, #1a0533 30%, #2d1b4e 60%, #4a2c6a 100%);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .game-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 18px;
+            z-index: 10;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pond-title {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(255, 255, 255, 0.3);
+            z-index: 5;
+            letter-spacing: 4px;
+        }
+
+        .pond {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+        }
+
+        .pond-container {
+            position: absolute;
+            width: 90%;
+            max-width: 650px;
+            height: 85%;
+            max-height: 550px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sky-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                #1a0533 0%, 
+                #2d1b4e 20%, 
+                #4a2c6a 40%, 
+                #7b4a8a 60%, 
+                #a86bb9 80%,
+                #d4a5d9 100%);
+            border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+            overflow: hidden;
+            box-shadow: 
+                0 0 80px rgba(168, 107, 185, 0.4),
+                0 0 120px rgba(212, 165, 217, 0.3),
+                inset 0 -20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .sun-rays {
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 220, 100, 0.3) 0%, 
+                rgba(255, 200, 150, 0.15) 30%, 
+                transparent 60%);
+            animation: sunPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes sunPulse {
+            0%, 100% { opacity: 0.6; transform: scale(1) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.1) rotate(10deg); }
+        }
+
+        .rainbow {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 40%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(255, 0, 0, 0.1) 20%,
+                rgba(255, 127, 0, 0.15) 30%,
+                rgba(255, 255, 0, 0.15) 40%,
+                rgba(0, 255, 0, 0.12) 50%,
+                rgba(0, 0, 255, 0.12) 60%,
+                rgba(75, 0, 130, 0.1) 70%,
+                rgba(148, 0, 211, 0.08) 80%,
+                transparent 100%
+            );
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: rainbowShimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes rainbowShimmer {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .cloud {
+            position: absolute;
+            background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 100%);
+            border-radius: 50px;
+            filter: blur(1px);
+            animation: cloudFloat 20s ease-in-out infinite;
+        }
+
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .cloud-1 {
+            top: 8%;
+            left: -10%;
+            width: 120px;
+            height: 40px;
+            animation-delay: 0s;
+        }
+
+        .cloud-1::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 20px;
+        }
+
+        .cloud-1::after {
+            width: 35px;
+            height: 35px;
+            top: -15px;
+            left: 60px;
+        }
+
+        .cloud-2 {
+            top: 15%;
+            right: -5%;
+            width: 80px;
+            height: 30px;
+            animation-delay: -5s;
+            animation-direction: reverse;
+        }
+
+        .cloud-2::before {
+            width: 35px;
+            height: 35px;
+            top: -18px;
+            left: 15px;
+        }
+
+        .cloud-2::after {
+            width: 25px;
+            height: 25px;
+            top: -10px;
+            left: 40px;
+        }
+
+        .cloud-3 {
+            top: 5%;
+            right: 15%;
+            width: 60px;
+            height: 25px;
+            animation-delay: -10s;
+        }
+
+        .cloud-3::before {
+            width: 28px;
+            height: 28px;
+            top: -14px;
+            left: 10px;
+        }
+
+        .cloud-3::after {
+            width: 20px;
+            height: 20px;
+            top: -8px;
+            left: 30px;
+        }
+
+        @keyframes cloudFloat {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(10px) translateY(-5px); }
+            50% { transform: translateX(5px) translateY(5px); }
+            75% { transform: translateX(-5px) translateY(-3px); }
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .star:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .star:nth-child(2) { top: 30%; left: 70%; animation-delay: 0.3s; }
+        .star:nth-child(3) { top: 15%; left: 50%; animation-delay: 0.6s; }
+        .star:nth-child(4) { top: 40%; left: 30%; animation-delay: 0.9s; }
+        .star:nth-child(5) { top: 25%; left: 80%; animation-delay: 1.2s; }
+        .star:nth-child(6) { top: 35%; left: 15%; animation-delay: 1.5s; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: 
+                radial-gradient(circle at 30% 40%, rgba(255,255,255,0.4) 0%, transparent 2%),
+                radial-gradient(circle at 60% 30%, rgba(255,255,255,0.3) 0%, transparent 2%),
+                radial-gradient(circle at 40% 60%, rgba(255,255,255,0.35) 0%, transparent 2%),
+                radial-gradient(circle at 70% 50%, rgba(255,255,255,0.25) 0%, transparent 2%);
+            animation: sparkle 3s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .water-surface {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 45%;
+            background: linear-gradient(180deg,
+                rgba(30, 80, 120, 0.6) 0%,
+                rgba(20, 60, 100, 0.8) 40%,
+                rgba(10, 40, 80, 0.95) 100%);
+            border-radius: 0 0 45% 45% / 0 0 40% 40%;
+        }
+
+        .water-surface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+            animation: waterShimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes waterShimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .water-ripple {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 30%;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.15);
+            animation: rippleExpand 3s ease-out infinite;
+        }
+
+        .water-ripple:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .water-ripple:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        @keyframes rippleExpand {
+            0% { transform: translateX(-50%) scale(0.5); opacity: 0.5; }
+            100% { transform: translateX(-50%) scale(1.5); opacity: 0; }
+        }
+
+        .pond-bg {
+            position: absolute;
+            width: 90%;
+            max-width: 600px;
+            height: 80%;
+            max-height: 500px;
+            background: radial-gradient(ellipse at 30% 30%, #2d8a9e 0%, #1a5f7a 40%, #0d3b4c 100%);
+            border-radius: 50% 45% 55% 45% / 45% 55% 45% 55%;
+            box-shadow: 
+                0 0 60px rgba(45, 138, 158, 0.5),
+                inset 0 0 80px rgba(0, 0, 0, 0.3),
+                0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .pond-bg::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            width: 40%;
+            height: 25%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: ripple 4s ease-in-out infinite;
+        }
+
+        .pond-bg::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 20%;
+            width: 30%;
+            height: 20%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: ripple 5s ease-in-out infinite 1s;
+        }
+
+        @keyframes ripple {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
+        }
+
+        .water-wave {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, transparent 0%, rgba(255,255,255,0.05) 30%, transparent 31%),
+                radial-gradient(circle at 80% 20%, transparent 0%, rgba(255,255,255,0.05) 25%, transparent 26%),
+                radial-gradient(circle at 40% 40%, transparent 0%, rgba(255,255,255,0.03) 20%, transparent 21%);
+            animation: wave 8s linear infinite;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-10px) translateY(5px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        .bobber {
+            position: absolute;
+            width: 50px;
+            height: 80px;
+            cursor: pointer;
+            z-index: 5;
+            display: none;
+            transition: transform 0.1s;
+        }
+
+        .bobber.visible {
+            display: block;
+        }
+
+        .bobber.idle {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .bobber.biting {
+            animation: shake 0.15s ease-in-out infinite, bobber-red 0.3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        @keyframes bobber-red {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3) saturate(1.5); }
+        }
+
+        .bobber-stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 35px;
+            background: linear-gradient(to bottom, #2c3e50, #1a252f);
+            border-radius: 0 0 3px 3px;
+        }
+
+        .bobber-stem::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #f39c12;
+        }
+
+        .bobber.golden .bobber-body {
+            background: radial-gradient(circle at 30% 70%, #ffd700 0%, #ffb300 70%, #ff8c00 100%);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 4px 15px rgba(0, 0, 0, 0.4);
+            animation: goldenGlow 1s ease-in-out infinite;
+        }
+
+        .bobber.golden.biting .bobber-body {
+            background: radial-gradient(circle at 30% 70%, #ffed4a 0%, #ffd700 70%, #ffb300 100%);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes goldenGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+            50% { box-shadow: 0 0 50px rgba(255, 215, 0, 1); }
+        }
+
+        .bobber-body {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 70%, #ff6b6b 0%, #c0392b 70%, #922b21 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s;
+        }
+
+        .bobber.biting .bobber-body {
+            background: radial-gradient(circle at 30% 70%, #ff0000 0%, #cc0000 70%, #990000 100%);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .bobber-body::before {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            width: 12px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-cast {
+            background: linear-gradient(180deg, #5cb85c 0%, #449d44 100%);
+            color: white;
+        }
+
+        .btn-cast:hover:not(:disabled) {
+            background: linear-gradient(180deg, #6ec96e 0%, #5cb85c 100%);
+        }
+
+        .btn-reel {
+            background: linear-gradient(180deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+
+        .btn-reel:hover:not(:disabled) {
+            background: linear-gradient(180deg, #ff5252 0%, #f44336 100%);
+        }
+
+        .btn-golden {
+            background: linear-gradient(180deg, #ffd700 0%, #ffb300 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            animation: goldenPulse 1.5s ease-in-out infinite;
+        }
+
+        .btn-golden.active {
+            background: linear-gradient(180deg, #ffed4a 0%, #ffd700 100%);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
+        }
+
+        @keyframes goldenPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.9); }
+        }
+
+        .basket {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(180deg, #ff9f43 0%, #e67e22 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 20;
+            box-shadow: 0 4px 20px rgba(230, 126, 34, 0.5);
+            transition: all 0.2s;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .basket:hover {
+            transform: scale(1.1);
+        }
+
+        .basket-icon {
+            font-size: 28px;
+        }
+
+        .basket-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .big-catch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .big-catch-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .big-catch-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 24px;
+            padding: 40px 50px;
+            text-align: center;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(255, 215, 0, 0.3);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 90vw;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .big-catch-emoji {
+            font-size: 120px;
+            line-height: 1.2;
+            display: block;
+            animation: emoji-bounce 0.5s ease-out;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes emoji-bounce {
+            0% { transform: scale(0) rotate(-10deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .big-catch-text {
+            font-size: 26px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 20px;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .big-catch-subtext {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(180deg, #ffffff 0%, #ecf0f1 100%);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            0% { transform: translateY(50px) scale(0.9); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(180deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 10px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .catch-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 12px;
+        }
+
+        .catch-item {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .catch-item:hover {
+            transform: scale(1.05);
+        }
+
+        .catch-item-emoji {
+            font-size: 36px;
+            display: block;
+        }
+
+        .catch-item-name {
+            font-size: 12px;
+            color: #555;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .catch-item-count {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+
+        .empty-state-emoji {
+            font-size: 60px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 25px;
+            font-size: 16px;
+            z-index: 30;
+            opacity: 0;
+            transition: all 0.3s ease-out;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: rgba(46, 204, 113, 0.9);
+        }
+
+        .toast.error {
+            background: rgba(231, 76, 60, 0.9);
+        }
+
+        .toast.warning {
+            background: rgba(241, 196, 15, 0.9);
+            color: #333;
+        }
+
+        .daily-challenge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 15px;
+            font-size: 14px;
+            z-index: 15;
+            box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4);
+            max-width: 180px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .daily-challenge:hover {
+            transform: scale(1.05);
+        }
+
+        .daily-challenge-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .daily-challenge-progress {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            height: 8px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .daily-challenge-progress-bar {
+            background: linear-gradient(90deg, #f1c40f, #2ecc71);
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+
+        .weather-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 16px;
+            z-index: 15;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .weather-display:hover {
+            transform: scale(1.1);
+        }
+
+        .collection-btn {
+            position: absolute;
+            top: 20px;
+            right: 100px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 15;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .collection-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .collection-progress {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-weight: bold;
+        }
+
+        .journal-modal {
+            max-width: 700px;
+            max-height: 85vh;
+        }
+
+        .journal-section {
+            margin-bottom: 20px;
+        }
+
+        .journal-section-title {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .journal-section-title.common { background: rgba(160, 160, 160, 0.2); color: #666; }
+        .journal-section-title.rare { background: rgba(52, 152, 219, 0.2); color: #2980b9; }
+        .journal-section-title.epic { background: rgba(155, 89, 182, 0.2); color: #8e44ad; }
+        .journal-section-title.legendary { 
+            background: linear-gradient(90deg, rgba(241, 196, 15, 0.2), rgba(230, 126, 34, 0.2)); 
+            color: #d35400;
+        }
+
+        .journal-section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+            gap: 8px;
+        }
+
+        .weather-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .rain-drop {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, rgba(174, 194, 224, 0.6));
+            animation: rainFall linear infinite;
+        }
+
+        @keyframes rainFall {
+            0% { transform: translateY(-20px); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .weather-fog {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(200, 200, 220, 0.15);
+            animation: fogPulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes fogPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .weather-sun {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .butterfly {
+            position: absolute;
+            font-size: 28px;
+            animation: butterflyFly 8s ease-in-out infinite;
+        }
+
+        @keyframes butterflyFly {
+            0% { transform: translate(100vw, 0) scaleX(1); }
+            25% { transform: translate(50vw, -30px) scaleX(1); }
+            50% { transform: translate(0, 10px) scaleX(-1); }
+            75% { transform: translate(-50vw, -20px) scaleX(-1); }
+            100% { transform: translate(-100vw, 0) scaleX(1); }
+        }
+
+        .weather-night {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .night-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .firefly {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #ffff99 0%, #ffff00 50%, transparent 70%);
+            border-radius: 50%;
+            animation: fireflyFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes fireflyFloat {
+            0% { transform: translate(0, 0); opacity: 0; }
+            20% { opacity: 0.8; }
+            50% { transform: translate(30px, -20px); opacity: 0.6; }
+            80% { opacity: 0.8; }
+            100% { transform: translate(0, 0); opacity: 0; }
+        }
+
+        .moon-reflection {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(255, 255, 200, 0.3) 0%, rgba(255, 255, 150, 0.1) 40%, transparent 70%);
+            border-radius: 50%;
+            animation: moonGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes moonGlow {
+            0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.7; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .night-sparkle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 200, 0.8) 0%, rgba(255, 255, 150, 0.3) 50%, transparent 70%);
+            animation: sparkleGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes sparkleGlow {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        .weather-cloudy {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .cloud {
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.4;
+            animation: cloudMove linear infinite;
+            white-space: nowrap;
+        }
+
+        .cloud-1 { animation-duration: 18s; top: 5%; font-size: 70px; opacity: 0.35; }
+        .cloud-2 { animation-duration: 22s; top: 12%; font-size: 90px; opacity: 0.45; animation-delay: -5s; }
+        .cloud-3 { animation-duration: 20s; top: 8%; font-size: 60px; opacity: 0.3; animation-delay: -10s; }
+        .cloud-4 { animation-duration: 25s; top: 15%; font-size: 85px; opacity: 0.4; animation-delay: -3s; }
+        .cloud-5 { animation-duration: 19s; top: 3%; font-size: 75px; opacity: 0.38; animation-delay: -8s; }
+
+        @keyframes cloudMove {
+            0% { transform: translateX(110vw); }
+            100% { transform: translateX(-100vw); }
+        }
+
+        .collection-journal {
+            max-height: 70vh;
+        }
+
+        .journal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .journal-progress {
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .journal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 10px;
+        }
+
+        .journal-item {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 10px 5px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s;
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .journal-item:hover {
+            transform: scale(1.05);
+        }
+
+        .journal-item.locked {
+            background: #f5f5f5;
+            border-color: #cccccc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journal-item.locked .emoji {
+            filter: grayscale(100%) brightness(0.8);
+        }
+
+        .journal-item.locked .name {
+            color: #999999;
+        }
+
+        .journal-item.locked::after {
+            content: '☁️';
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            opacity: 0.94;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .journal-item .emoji {
+            font-size: 32px;
+            display: block;
+        }
+
+        .journal-item .name {
+            font-size: 10px;
+            color: #666;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .journal-item .count {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #e74c3c;
+            color: white;
+            font-size: 9px;
+            padding: 1px 5px;
+            border-radius: 8px;
+        }
+
+        .rarity-badge {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 8px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .rarity-common { background: #a0a0a0; }
+        .rarity-rare { background: #3498db; }
+        .rarity-epic { background: #9b59b6; }
+        .rarity-legendary { 
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+            animation: legendaryGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes legendaryGlow {
+            0%, 100% { box-shadow: 0 0 5px #f1c40f; }
+            50% { box-shadow: 0 0 15px #f1c40f, 0 0 25px rgba(241, 196, 15, 0.5); }
+        }
+
+        .big-catch-rarity {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .big-catch-special {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 50px;
+            animation: specialSpin 2s linear infinite;
+        }
+
+        @keyframes specialSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .bomb-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,100,0,0.8), rgba(255,0,0,0.6));
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: bombShake 0.5s ease-in-out;
+        }
+
+        .bomb-effect.show {
+            display: flex;
+        }
+
+        @keyframes bombShake {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-10px, -10px); }
+            20% { transform: translate(10px, 10px); }
+            30% { transform: translate(-10px, 10px); }
+            40% { transform: translate(10px, -10px); }
+            50% { transform: translate(-5px, -5px); }
+            60% { transform: translate(5px, 5px); }
+            70% { transform: translate(-5px, 5px); }
+            80% { transform: translate(5px, -5px); }
+            90% { transform: translate(-2px, -2px); }
+        }
+
+        .bomb-emoji {
+            font-size: 150px;
+            animation: bombPulse 0.3s ease-in-out infinite;
+        }
+
+        @keyframes bombPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .ghost-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 20, 40, 0.9);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .ghost-effect.show {
+            display: flex;
+            animation: ghostFadeIn 0.5s ease-out;
+        }
+
+        @keyframes ghostFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .ghost-emoji {
+            font-size: 120px;
+            animation: ghostFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes ghostFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .ghost-text {
+            color: #a0a0ff;
+            font-size: 24px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .btn {
+                padding: 14px 24px;
+                font-size: 16px;
+            }
+
+            .pond-title {
+                font-size: 22px;
+                top: 75px;
+                letter-spacing: 2px;
+            }
+
+            .controls {
+                bottom: 100px;
+            }
+
+            .big-catch-card {
+                padding: 30px 25px;
+            }
+
+            .big-catch-emoji {
+                font-size: 80px;
+            }
+
+            .big-catch-text {
+                font-size: 20px;
+            }
+
+            .basket {
+                width: 55px;
+                height: 55px;
+            }
+
+            .basket-icon {
+                font-size: 24px;
+            }
+
+            .status-bar {
+                font-size: 14px;
+                padding: 10px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="status-bar" id="statusText">点击「抛竿」开始钓鱼</div>
+
+        <div class="pond-title">鱼塘之大，无奇不有</div>
+
+        <div class="pond">
+            <div class="pond-container">
+                <div class="sky-bg">
+                    <div class="sun-rays"></div>
+                    <div class="rainbow"></div>
+                    <div class="cloud cloud-1"></div>
+                    <div class="cloud cloud-2"></div>
+                    <div class="cloud cloud-3"></div>
+                    <div class="stars">
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                    <div class="sparkle"></div>
+                    <div class="water-surface">
+                        <div class="water-ripple"></div>
+                        <div class="water-ripple"></div>
+                        <div class="water-ripple"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bobber" id="bobber">
+                <div class="bobber-body"></div>
+                <div class="bobber-stem"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-cast" id="castBtn">🎣 抛竿</button>
+            <button class="btn btn-reel" id="reelBtn" disabled>⚡ 提竿</button>
+            <button class="btn btn-golden" id="goldenBobberBtn" style="display: none;">✨</button>
+        </div>
+    </div>
+
+    <div class="basket" id="basket">
+        <span class="basket-icon">🧺</span>
+        <span class="basket-count" id="basketCount">0</span>
+    </div>
+
+    <div class="daily-challenge" id="dailyChallenge">
+        <div class="daily-challenge-title">
+            <span>🎯</span> 每日挑战
+        </div>
+        <div id="challengeText">加载中...</div>
+        <div class="daily-challenge-progress">
+            <div class="daily-challenge-progress-bar" id="challengeBar" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="weather-display" id="weatherDisplay">
+        <span id="weatherEmoji">☀️</span>
+    </div>
+
+    <div class="collection-btn" id="collectionBtn">
+        <span>📖</span>
+        <span class="collection-progress" id="collectionProgress">0%</span>
+    </div>
+
+    <div class="weather-rain" id="weatherRain"></div>
+    <div class="weather-sun" id="weatherSun"></div>
+    <div class="weather-night" id="weatherNight"></div>
+    <div class="weather-cloudy" id="weatherCloudy"></div>
+
+    <div class="big-catch-overlay" id="bigCatchOverlay">
+        <div class="big-catch-card">
+            <span class="big-catch-emoji" id="bigCatchEmoji">🐟</span>
+            <div class="big-catch-text" id="bigCatchText">你钓到了 小鱼！</div>
+            <div class="big-catch-rarity" id="bigCatchRarity">普通</div>
+            <div class="big-catch-subtext">已放入鱼筐</div>
+        </div>
+    </div>
+
+    <div class="bomb-effect" id="bombEffect">
+        <div class="bomb-emoji">💥</div>
+    </div>
+
+    <div class="ghost-effect" id="ghostEffect">
+        <div class="ghost-emoji">👻</div>
+        <div class="ghost-text">你被幽灵缠上了！<br>本次钓鱼失败...</div>
+    </div>
+
+    <div class="modal-overlay" id="weatherBonusOverlay">
+        <div class="modal" style="max-width: 350px; text-align: center;">
+            <div class="modal-header" style="justify-content: center;">
+                <span id="weatherBonusTitle">天气加成</span>
+            </div>
+            <div class="modal-body" id="weatherBonusBody">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="journalOverlay">
+        <div class="modal journal-modal">
+            <div class="modal-header">
+                <span>📖 图鉴收藏</span>
+                <button class="modal-close" id="journalClose">×</button>
+            </div>
+            <div class="modal-body" id="journalBody">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <span>🧺 鱼筐</span>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="empty-state">
+                    <div class="empty-state-emoji">🎣</div>
+                    <div class="empty-state-text">还没有钓到任何东西</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const rarityConfig = {
+            common: { name: "普通", color: "#a0a0a0", glow: "none", label: "N" },
+            rare: { name: "稀有", color: "#3498db", glow: "0 0 10px #3498db", label: "R" },
+            epic: { name: "史诗", color: "#9b59b6", glow: "0 0 15px #9b59b6", label: "SR" },
+            legendary: { name: "传说", color: "#f1c40f", glow: "0 0 25px #f1c40f, 0 0 50px rgba(241, 196, 15, 0.5)", label: "SSR" }
+        };
+
+        const weatherTypes = {
+            sunny: { name: "晴天", emoji: "☀️", emojiBoost: ["☀️", "🌻", "🦋", "🍦"] },
+            rainy: { name: "雨天", emoji: "🌧️", emojiBoost: ["🌧️", "🐸", "🐌", "☔", "💧"] },
+            night: { name: "夜晚", emoji: "🌙", emojiBoost: ["🌙", "⭐", "✨", "🌟", "🦇"] },
+            cloudy: { name: "多云", emoji: "☁️", emojiBoost: ["☁️", "🦋", "🐦"] }
+        };
+        
+        const fishItems = [
+            { emoji: "🐟", name: "小鱼", weight: 95, category: "fish", rarity: "common" },
+            { emoji: "🐠", name: "热带鱼", weight: 70, category: "fish", rarity: "common" },
+            { emoji: "🐡", name: "河豚", weight: 55, category: "fish", rarity: "common" },
+            { emoji: "🐋", name: "鲸鱼", weight: 20, category: "fish", rarity: "epic" },
+            { emoji: "🐬", name: "海豚", weight: 25, category: "fish", rarity: "rare" },
+            { emoji: "🐳", name: "蓝鲸", weight: 15, category: "fish", rarity: "epic" },
+            { emoji: "🐊", name: "鳄鱼", weight: 30, category: "fish", rarity: "rare" },
+            { emoji: "🐢", name: "乌龟", weight: 50, category: "fish", rarity: "common" },
+            { emoji: "🐙", name: "章鱼", weight: 35, category: "fish", rarity: "rare" },
+            { emoji: "🦑", name: "鱿鱼", weight: 40, category: "fish", rarity: "common" },
+            { emoji: "🦐", name: "虾", weight: 60, category: "fish", rarity: "common" },
+            { emoji: "🦞", name: "龙虾", weight: 30, category: "fish", rarity: "rare" },
+            { emoji: "🦀", name: "螃蟹", weight: 45, category: "fish", rarity: "common" },
+            { emoji: "🐚", name: "海螺", weight: 55, category: "fish", rarity: "common" },
+            { emoji: "🦈", name: "鲨鱼", weight: 12, category: "fish", rarity: "epic" },
+            { emoji: "🐸", name: "青蛙", weight: 50, category: "amphibian", rarity: "common", weatherBoost: ["rainy"] },
+            { emoji: "🦎", name: "蜥蜴", weight: 35, category: "amphibian", rarity: "common" },
+            { emoji: "🐍", name: "蛇", weight: 30, category: "amphibian", rarity: "rare" },
+            { emoji: "🐉", name: "小龙", weight: 5, category: "rare", rarity: "legendary" },
+            { emoji: "🐶", name: "小狗", weight: 30, category: "animal", rarity: "common" },
+            { emoji: "🐱", name: "小猫", weight: 30, category: "animal", rarity: "common" },
+            { emoji: "🐭", name: "小老鼠", weight: 45, category: "animal", rarity: "common" },
+            { emoji: "🐹", name: "仓鼠", weight: 35, category: "animal", rarity: "common" },
+            { emoji: "🐰", name: "小兔子", weight: 35, category: "animal", rarity: "common" },
+            { emoji: "🦊", name: "狐狸", weight: 18, category: "animal", rarity: "rare" },
+            { emoji: "🐻", name: "熊", weight: 12, category: "animal", rarity: "epic" },
+            { emoji: "🐼", name: "熊猫", weight: 8, category: "animal", rarity: "epic" },
+            { emoji: "🐨", name: "考拉", weight: 10, category: "animal", rarity: "rare" },
+            { emoji: "🐯", name: "老虎", weight: 6, category: "animal", rarity: "legendary" },
+            { emoji: "🦁", name: "狮子", weight: 6, category: "animal", rarity: "legendary" },
+            { emoji: "🐮", name: "奶牛", weight: 25, category: "animal", rarity: "common" },
+            { emoji: "🐷", name: "小猪", weight: 30, category: "animal", rarity: "common" },
+            { emoji: "🐒", name: "猴子", weight: 22, category: "animal", rarity: "rare" },
+            { emoji: "🐔", name: "母鸡", weight: 40, category: "animal", rarity: "common" },
+            { emoji: "🐧", name: "企鹅", weight: 28, category: "animal", rarity: "rare" },
+            { emoji: "🐦", name: "小鸟", weight: 50, category: "animal", rarity: "common" },
+            { emoji: "🦋", name: "蝴蝶", weight: 45, category: "animal", rarity: "common" },
+            { emoji: "🐝", name: "蜜蜂", weight: 40, category: "animal", rarity: "common" },
+            { emoji: "🐞", name: "瓢虫", weight: 35, category: "animal", rarity: "common" },
+            { emoji: "🦗", name: "蟋蟀", weight: 30, category: "animal", rarity: "common" },
+            { emoji: "🦂", name: "蝎子", weight: 15, category: "animal", rarity: "rare" },
+            { emoji: "🐌", name: "蜗牛", weight: 40, category: "animal", rarity: "common", weatherBoost: ["rainy"] },
+            { emoji: "🦇", name: "蝙蝠", weight: 25, category: "animal", rarity: "rare", weatherBoost: ["night"] },
+            { emoji: "🦉", name: "猫头鹰", weight: 20, category: "animal", rarity: "rare", weatherBoost: ["night"] },
+            { emoji: "🦄", name: "独角兽", weight: 3, category: "animal", rarity: "legendary" },
+            { emoji: "🦓", name: "斑马", weight: 8, category: "animal", rarity: "epic" },
+            { emoji: "🦒", name: "长颈鹿", weight: 6, category: "animal", rarity: "epic" },
+            { emoji: "🐘", name: "大象", weight: 5, category: "animal", rarity: "epic" },
+            { emoji: "🦏", name: "犀牛", weight: 5, category: "animal", rarity: "epic" },
+            { emoji: "🦛", name: "河马", weight: 6, category: "animal", rarity: "epic" },
+            { emoji: "🦘", name: "袋鼠", weight: 8, category: "animal", rarity: "rare" },
+            { emoji: "🦡", name: "獾", weight: 10, category: "animal", rarity: "rare" },
+            { emoji: "🦫", name: "海狸", weight: 12, category: "animal", rarity: "rare" },
+            { emoji: "🍎", name: "苹果", weight: 60, category: "food", rarity: "common" },
+            { emoji: "🍐", name: "梨", weight: 55, category: "food", rarity: "common" },
+            { emoji: "🍊", name: "橘子", weight: 60, category: "food", rarity: "common" },
+            { emoji: "🍋", name: "柠檬", weight: 50, category: "food", rarity: "common" },
+            { emoji: "🍌", name: "香蕉", weight: 60, category: "food", rarity: "common" },
+            { emoji: "🍉", name: "西瓜", weight: 50, category: "food", rarity: "common" },
+            { emoji: "🍇", name: "葡萄", weight: 55, category: "food", rarity: "common" },
+            { emoji: "🍓", name: "草莓", weight: 50, category: "food", rarity: "common" },
+            { emoji: "🥝", name: "猕猴桃", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🥥", name: "椰子", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🍒", name: "樱桃", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🍑", name: "桃子", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🥭", name: "芒果", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🍍", name: "菠萝", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🥑", name: "牛油果", weight: 35, category: "food", rarity: "common" },
+            { emoji: "🥦", name: "西兰花", weight: 50, category: "food", rarity: "common" },
+            { emoji: "🥕", name: "胡萝卜", weight: 55, category: "food", rarity: "common" },
+            { emoji: "🌽", name: "玉米", weight: 50, category: "food", rarity: "common" },
+            { emoji: "🍆", name: "茄子", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🍔", name: "汉堡", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🍟", name: "薯条", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🍕", name: "披萨", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🥪", name: "三明治", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🍦", name: "冰激凌", weight: 50, category: "food", rarity: "common" },
+            { emoji: "🍩", name: "甜甜圈", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🍪", name: "饼干", weight: 50, category: "food", rarity: "common" },
+            { emoji: "🍿", name: "爆米花", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🧁", name: "杯子蛋糕", weight: 40, category: "food", rarity: "rare" },
+            { emoji: "🍰", name: "蛋糕", weight: 35, category: "food", rarity: "rare" },
+            { emoji: "🍮", name: "布丁", weight: 40, category: "food", rarity: "rare" },
+            { emoji: "🍯", name: "蜂蜜", weight: 30, category: "food", rarity: "rare" },
+            { emoji: "🥐", name: "牛角面包", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🥖", name: "法棍", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🥨", name: "椒盐卷饼", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🌮", name: "玉米卷", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🌯", name: "卷饼", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🥗", name: "沙拉", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🥘", name: "烩饭", weight: 35, category: "food", rarity: "rare" },
+            { emoji: "🍣", name: "寿司", weight: 30, category: "food", rarity: "rare" },
+            { emoji: "🍱", name: "便当", weight: 30, category: "food", rarity: "rare" },
+            { emoji: "🍜", name: "拉面", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🍲", name: "味噌汤", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🍛", name: "咖喱", weight: 35, category: "food", rarity: "rare" },
+            { emoji: "🍢", name: "关东煮", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🍡", name: "糯米团", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🍧", name: "刨冰", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🧇", name: "华夫饼", weight: 40, category: "food", rarity: "common" },
+            { emoji: "🥞", name: "松饼", weight: 45, category: "food", rarity: "common" },
+            { emoji: "🧈", name: "黄油", weight: 50, category: "food", rarity: "common" },
+            { emoji: "🧂", name: "盐", weight: 55, category: "food", rarity: "common" },
+            { emoji: "🥫", name: "罐头", weight: 45, category: "food", rarity: "common" },
+            { emoji: "👟", name: "运动鞋", weight: 40, category: "item", rarity: "common" },
+            { emoji: "👢", name: "靴子", weight: 35, category: "item", rarity: "common" },
+            { emoji: "🧦", name: "袜子", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🧢", name: "帽子", weight: 45, category: "item", rarity: "common" },
+            { emoji: "👑", name: "王冠", weight: 6, category: "rare", rarity: "legendary" },
+            { emoji: "💍", name: "戒指", weight: 12, category: "item", rarity: "rare" },
+            { emoji: "🕶️", name: "墨镜", weight: 40, category: "item", rarity: "common" },
+            { emoji: "⌚", name: "手表", weight: 35, category: "item", rarity: "common" },
+            { emoji: "📱", name: "手机", weight: 30, category: "item", rarity: "common" },
+            { emoji: "💎", name: "钻石", weight: 4, category: "rare", rarity: "legendary" },
+            { emoji: "🧸", name: "泰迪熊", weight: 28, category: "item", rarity: "rare" },
+            { emoji: "🎈", name: "气球", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🪣", name: "水桶", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🧽", name: "海绵", weight: 55, category: "item", rarity: "common" },
+            { emoji: "🪠", name: "马桶塞", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🧴", name: "乳液", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🧃", name: "果汁", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🥤", name: "饮料", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🧥", name: "外套", weight: 35, category: "item", rarity: "common" },
+            { emoji: "🥾", name: "登山靴", weight: 35, category: "item", rarity: "common" },
+            { emoji: "👜", name: "手提包", weight: 30, category: "item", rarity: "common" },
+            { emoji: "👛", name: "钱包", weight: 35, category: "item", rarity: "common" },
+            { emoji: "🎒", name: "背包", weight: 35, category: "item", rarity: "common" },
+            { emoji: "👓", name: "眼镜", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🎩", name: "礼帽", weight: 20, category: "item", rarity: "rare" },
+            { emoji: "🧣", name: "围巾", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🧤", name: "手套", weight: 40, category: "item", rarity: "common" },
+            { emoji: "☂️", name: "雨伞", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🧵", name: "线团", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🧶", name: "毛线", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🎀", name: "蝴蝶结", weight: 35, category: "item", rarity: "rare" },
+            { emoji: "🔑", name: "钥匙", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🔒", name: "锁", weight: 45, category: "item", rarity: "common" },
+            { emoji: "💼", name: "公文包", weight: 30, category: "item", rarity: "common" },
+            { emoji: "📷", name: "相机", weight: 30, category: "item", rarity: "rare" },
+            { emoji: "🎤", name: "麦克风", weight: 35, category: "item", rarity: "common" },
+            { emoji: "🎧", name: "耳机", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🎮", name: "游戏手柄", weight: 30, category: "item", rarity: "rare" },
+            { emoji: "🎲", name: "骰子", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🎳", name: "保龄球", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🎯", name: "飞镖", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🃏", name: "扑克牌", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🎴", name: "花牌", weight: 40, category: "item", rarity: "rare" },
+            { emoji: "🌊", name: "海浪", weight: 50, category: "nature", rarity: "common" },
+            { emoji: "💧", name: "水滴", weight: 60, category: "nature", rarity: "common" },
+            { emoji: "🌧️", name: "雨", weight: 45, category: "nature", rarity: "common", weatherBoost: ["rainy"] },
+            { emoji: "⛈️", name: "雷雨", weight: 30, category: "nature", rarity: "rare", weatherBoost: ["rainy"] },
+            { emoji: "🌈", name: "彩虹", weight: 20, category: "nature", rarity: "rare" },
+            { emoji: "☀️", name: "太阳", weight: 50, category: "nature", rarity: "common", weatherBoost: ["sunny"] },
+            { emoji: "🌙", name: "月亮", weight: 45, category: "nature", rarity: "common", weatherBoost: ["night"] },
+            { emoji: "⭐", name: "星星", weight: 40, category: "nature", rarity: "common", weatherBoost: ["night"] },
+            { emoji: "🌟", name: "闪光星", weight: 35, category: "nature", rarity: "rare", weatherBoost: ["night"] },
+            { emoji: "💨", name: "风", weight: 55, category: "nature", rarity: "common" },
+            { emoji: "🍃", name: "叶子", weight: 60, category: "nature", rarity: "common" },
+            { emoji: "🌸", name: "樱花", weight: 45, category: "nature", rarity: "common" },
+            { emoji: "🌺", name: "花朵", weight: 45, category: "nature", rarity: "common" },
+            { emoji: "🌻", name: "向日葵", weight: 40, category: "nature", rarity: "common", weatherBoost: ["sunny"] },
+            { emoji: "🌷", name: "郁金香", weight: 40, category: "nature", rarity: "common" },
+            { emoji: "🌹", name: "玫瑰", weight: 35, category: "nature", rarity: "rare" },
+            { emoji: "🌸", name: "梅花", weight: 40, category: "nature", rarity: "common" },
+            { emoji: "🌺", name: "芙蓉", weight: 35, category: "nature", rarity: "rare" },
+            { emoji: "🌴", name: "棕榈树", weight: 30, category: "nature", rarity: "rare" },
+            { emoji: "🌲", name: "常青树", weight: 40, category: "nature", rarity: "common" },
+            { emoji: "🌳", name: "橡树", weight: 40, category: "nature", rarity: "common" },
+            { emoji: "🎋", name: "竹子", weight: 35, category: "nature", rarity: "rare" },
+            { emoji: "🍄", name: "蘑菇", weight: 45, category: "nature", rarity: "common" },
+            { emoji: "🌿", name: "草药", weight: 50, category: "nature", rarity: "common" },
+            { emoji: "☘️", name: "三叶草", weight: 55, category: "nature", rarity: "common" },
+            { emoji: "🌵", name: "仙人掌", weight: 40, category: "nature", rarity: "common" },
+            { emoji: "🐚", name: "贝壳", weight: 50, category: "nature", rarity: "common" },
+            { emoji: "🪸", name: "珊瑚", weight: 35, category: "nature", rarity: "rare" },
+            { emoji: "🏔️", name: "雪山", weight: 25, category: "nature", rarity: "rare" },
+            { emoji: "🌋", name: "火山", weight: 15, category: "nature", rarity: "epic" },
+            { emoji: "😀", name: "笑脸", weight: 50, category: "emoji", rarity: "common" },
+            { emoji: "😎", name: "酷脸", weight: 40, category: "emoji", rarity: "common" },
+            { emoji: "🥳", name: "派对脸", weight: 35, category: "emoji", rarity: "common" },
+            { emoji: "😱", name: "惊讶", weight: 40, category: "emoji", rarity: "common" },
+            { emoji: "💩", name: "便便", weight: 30, category: "emoji", rarity: "common" },
+            { emoji: "🤖", name: "机器人", weight: 28, category: "emoji", rarity: "rare" },
+            { emoji: "🎃", name: "南瓜", weight: 30, category: "emoji", rarity: "common" },
+            { emoji: "❤️", name: "爱心", weight: 50, category: "emoji", rarity: "common" },
+            { emoji: "💯", name: "满分", weight: 35, category: "emoji", rarity: "common" },
+            { emoji: "🔥", name: "火焰", weight: 40, category: "emoji", rarity: "common" },
+            { emoji: "💕", name: "双爱心", weight: 40, category: "emoji", rarity: "common" },
+            { emoji: "💖", name: "闪爱心", weight: 35, category: "emoji", rarity: "rare" },
+            { emoji: "💗", name: "增长爱心", weight: 35, category: "emoji", rarity: "rare" },
+            { emoji: "✨", name: "闪光", weight: 45, category: "emoji", rarity: "common", weatherBoost: ["night"] },
+            { emoji: "💫", name: "流星", weight: 30, category: "emoji", rarity: "rare", weatherBoost: ["night"] },
+            { emoji: "🌈", name: "彩虹", weight: 25, category: "emoji", rarity: "rare" },
+            { emoji: "🎉", name: "彩带", weight: 45, category: "emoji", rarity: "common" },
+            { emoji: "🎊", name: "彩球", weight: 45, category: "emoji", rarity: "common" },
+            { emoji: "🥂", name: "干杯", weight: 35, category: "emoji", rarity: "rare" },
+            { emoji: "🍾", name: "香槟", weight: 30, category: "emoji", rarity: "rare" },
+            { emoji: "🏆", name: "奖杯", weight: 6, category: "rare", rarity: "legendary" },
+            { emoji: "🎖️", name: "奖牌", weight: 10, category: "rare", rarity: "rare" },
+            { emoji: "🧞", name: "神灯", weight: 4, category: "rare", rarity: "legendary" },
+            { emoji: "🧙‍♂️", name: "巫师", weight: 4, category: "rare", rarity: "legendary" },
+            { emoji: "🧚", name: "小精灵", weight: 4, category: "rare", rarity: "legendary" },
+            { emoji: "🧜", name: "美人鱼", weight: 4, category: "rare", rarity: "legendary" },
+            { emoji: "🧛", name: "吸血鬼", weight: 4, category: "rare", rarity: "legendary" },
+            { emoji: "🗿", name: "巨石像", weight: 3, category: "rare", rarity: "legendary" },
+            { emoji: "🎁", name: "礼物", weight: 10, category: "rare", rarity: "rare" },
+            { emoji: "💀", name: "骷髅", weight: 15, category: "emoji", rarity: "rare" },
+            { emoji: "👻", name: "幽灵", weight: 8, category: "fun", rarity: "epic", isSpecial: true, specialType: "ghost" },
+            { emoji: "💣", name: "炸弹", weight: 5, category: "fun", rarity: "epic", isSpecial: true, specialType: "bomb" },
+            { emoji: "🎰", name: "老虎机", weight: 8, category: "fun", rarity: "epic" },
+            { emoji: "🎱", name: "8号球", weight: 20, category: "item", rarity: "rare" },
+            { emoji: "🧩", name: "拼图", weight: 35, category: "item", rarity: "common" },
+            { emoji: "🧸", name: "玩具熊", weight: 30, category: "item", rarity: "rare" },
+            { emoji: "🎪", name: "马戏团", weight: 15, category: "fun", rarity: "epic" },
+            { emoji: "🎭", name: "面具", weight: 35, category: "item", rarity: "common" },
+            { emoji: "🎨", name: "调色板", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🎬", name: "胶片", weight: 35, category: "item", rarity: "common" },
+            { emoji: "🎤", name: "麦克风", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🎵", name: "音符", weight: 50, category: "emoji", rarity: "common" },
+            { emoji: "🎶", name: "音乐", weight: 50, category: "emoji", rarity: "common" },
+            { emoji: "🎼", name: "乐谱", weight: 45, category: "emoji", rarity: "common" },
+            { emoji: "🔔", name: "铃铛", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🎺", name: "小号", weight: 30, category: "item", rarity: "rare" },
+            { emoji: "🎸", name: "吉他", weight: 30, category: "item", rarity: "rare" },
+            { emoji: "🎹", name: "钢琴", weight: 25, category: "item", rarity: "rare" },
+            { emoji: "🥁", name: "鼓", weight: 35, category: "item", rarity: "common" },
+            { emoji: "🎻", name: "小提琴", weight: 25, category: "item", rarity: "rare" },
+            { emoji: "🏀", name: "篮球", weight: 45, category: "item", rarity: "common" },
+            { emoji: "⚽", name: "足球", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🏈", name: "橄榄球", weight: 40, category: "item", rarity: "common" },
+            { emoji: "⚾", name: "棒球", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🎾", name: "网球", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🏐", name: "排球", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🏉", name: "橄榄球", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🎱", name: "台球", weight: 40, category: "item", rarity: "common" },
+            { emoji: "🪀", name: "空竹", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🏓", name: "乒乓球", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🏸", name: "羽毛球", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🥊", name: "拳击手套", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🥋", name: "道服", weight: 45, category: "item", rarity: "common" },
+            { emoji: "🎣", name: "鱼竿", weight: 50, category: "item", rarity: "common" },
+            { emoji: "🛶", name: "独木舟", weight: 30, category: "item", rarity: "rare" },
+            { emoji: "⛵", name: "帆船", weight: 25, category: "item", rarity: "rare" },
+            { emoji: "🚤", name: "快艇", weight: 25, category: "item", rarity: "rare" },
+            { emoji: "🛥️", name: "游艇", weight: 20, category: "item", rarity: "epic" },
+            { emoji: "🚢", name: "轮船", weight: 15, category: "item", rarity: "epic" },
+            { emoji: "🛸", name: "飞碟", weight: 5, category: "fun", rarity: "legendary" },
+            { emoji: "🚀", name: "火箭", weight: 8, category: "fun", rarity: "epic" },
+            { emoji: "✈️", name: "飞机", weight: 30, category: "item", rarity: "rare" },
+            { emoji: "🚁", name: "直升机", weight: 25, category: "item", rarity: "rare" },
+            { emoji: "🗼", name: "埃菲尔铁塔", weight: 10, category: "fun", rarity: "epic" },
+            { emoji: "🗽", name: "自由女神", weight: 8, category: "fun", rarity: "legendary" },
+            { emoji: "🏰", name: "城堡", weight: 12, category: "fun", rarity: "epic" },
+            { emoji: "🏯", name: "日式城堡", weight: 12, category: "fun", rarity: "epic" },
+            { emoji: "🏟️", name: "体育场", weight: 25, category: "item", rarity: "rare" },
+            { emoji: "🎡", name: "摩天轮", weight: 20, category: "fun", rarity: "rare" },
+            { emoji: "🎢", name: "过山车", weight: 18, category: "fun", rarity: "rare" },
+            { emoji: "💒", name: "城堡", weight: 15, category: "fun", rarity: "epic" }
+        ];
+
+        let gameState = {
+            phase: "waiting",
+            catches: [],
+            biteTimer: null,
+            reelTimer: null,
+            weather: "sunny",
+            dailyChallenge: null,
+            challengeProgress: {},
+            collection: new Set(),
+            castCount: 0,
+            hasGoldenBobber: false,
+            goldenBobberActive: false
+        };
+
+        function saveGameData() {
+            const data = {
+                catches: gameState.catches,
+                collection: Array.from(gameState.collection),
+                weather: gameState.weather,
+                hasGoldenBobber: gameState.hasGoldenBobber,
+                lastPlayed: Date.now()
+            };
+            localStorage.setItem('fishingGameData', JSON.stringify(data));
+        }
+
+        function loadGameData() {
+            const saved = localStorage.getItem('fishingGameData');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    gameState.catches = data.catches || [];
+                    gameState.collection = new Set(data.collection || []);
+                    gameState.weather = data.weather || "sunny";
+                    gameState.hasGoldenBobber = data.hasGoldenBobber || false;
+                    updateBasketCount();
+                    updateCollectionProgress();
+                    weatherEmoji.textContent = weatherTypes[gameState.weather].emoji;
+                    updateWeatherEffects();
+                    updateGoldenBobberButton();
+                } catch (e) {
+                    console.error('Failed to load game data:', e);
+                }
+            }
+        }
+
+        const statusText = document.getElementById("statusText");
+        const castBtn = document.getElementById("castBtn");
+        const reelBtn = document.getElementById("reelBtn");
+        const goldenBobberBtn = document.getElementById("goldenBobberBtn");
+        const bobber = document.getElementById("bobber");
+        const basket = document.getElementById("basket");
+        const basketCount = document.getElementById("basketCount");
+        const bigCatchOverlay = document.getElementById("bigCatchOverlay");
+        const bigCatchEmoji = document.getElementById("bigCatchEmoji");
+        const bigCatchText = document.getElementById("bigCatchText");
+        const bigCatchRarity = document.getElementById("bigCatchRarity");
+        const modalOverlay = document.getElementById("modalOverlay");
+        const modalBody = document.getElementById("modalBody");
+        const modalClose = document.getElementById("modalClose");
+        const toast = document.getElementById("toast");
+        
+        const collectionBtn = document.getElementById("collectionBtn");
+        const collectionProgress = document.getElementById("collectionProgress");
+        const journalOverlay = document.getElementById("journalOverlay");
+        const journalBody = document.getElementById("journalBody");
+        const journalClose = document.getElementById("journalClose");
+        
+        const dailyChallenge = document.getElementById("dailyChallenge");
+        const challengeText = document.getElementById("challengeText");
+        const challengeBar = document.getElementById("challengeBar");
+        const weatherDisplay = document.getElementById("weatherDisplay");
+        const weatherEmoji = document.getElementById("weatherEmoji");
+        const weatherRain = document.getElementById("weatherRain");
+        const weatherSun = document.getElementById("weatherSun");
+        const weatherNight = document.getElementById("weatherNight");
+        const weatherCloudy = document.getElementById("weatherCloudy");
+        const bombEffect = document.getElementById("bombEffect");
+        const ghostEffect = document.getElementById("ghostEffect");
+
+        const dailyChallenges = [
+            { text: "钓到 5 条鱼（任何鱼类Emoji都算）", check: (catches) => catches.filter(c => c.category === 'fish').length >= 5, target: 5, reward: "✨ 金色鱼漂" },
+            { text: "钓到 3 种水果（如🍎🍌🍉等）", check: (catches) => { const fruits = catches.filter(c => ['苹果', '梨', '橘子', '柠檬', '香蕉', '西瓜', '葡萄', '草莓', '猕猴桃', '椰子', '樱桃', '桃子', '芒果', '菠萝'].includes(c.name)); return new Set(fruits.map(f => f.name)).size >= 3; }, target: 3, reward: "✨ 金色鱼漂" },
+            { text: "钓到 5 件不同物品", check: (catches) => new Set(catches.map(c => c.name)).size >= 5, target: 5, reward: "✨ 金色鱼漂" },
+            { text: "钓到 3 只海洋生物（鱼、章鱼、海豚等）", check: (catches) => catches.filter(c => ['鲸鱼', '海豚', '蓝鲸', '鲨鱼', '章鱼', '鱿鱼', '龙虾', '螃蟹', '海螺', '乌龟'].includes(c.name)).length >= 3, target: 3, reward: "✨ 金色鱼漂" },
+            { text: "钓到 2 件稀有物品（稀有及以上）", check: (catches) => catches.filter(c => c.rarity === 'rare' || c.rarity === 'epic' || c.rarity === 'legendary').length >= 2, target: 2, reward: "✨ 金色鱼漂" },
+            { text: "连续成功提竿 3 次", check: (catches) => { let streak = 0; for (let i = catches.length - 1; i >= 0; i--) { if (catches[i]) streak++; else break; } return streak >= 3; }, target: 3, reward: "✨ 金色鱼漂", specialCheck: true },
+            { text: "成功提竿 10 次（累计成功）", check: (catches) => catches.length >= 10, target: 10, reward: "✨ 金色鱼漂" },
+            { text: "钓到 1 个垃圾（鞋子、瓶子、塑料袋等）", check: (catches) => catches.filter(c => ['运动鞋', '靴子', '瓶子', '塑料袋', '易拉罐', '纸杯'].includes(c.name)).length >= 1, target: 1, reward: "✨ 金色鱼漂" },
+            { text: "在雨天钓到 2 条鱼", check: (catches) => { const rainyCatches = catches.filter(c => c.weather === 'rainy' && c.category === 'fish'); return rainyCatches.length >= 2; }, target: 2, reward: "✨ 金色鱼漂", weatherCheck: 'rainy' },
+            { text: "在夜晚钓到 2 条鱼", check: (catches) => { const nightCatches = catches.filter(c => c.weather === 'night' && c.category === 'fish'); return nightCatches.length >= 2; }, target: 2, reward: "✨ 金色鱼漂", weatherCheck: 'night' },
+            { text: "抛竿 5 次（不要求钓到）", check: (catches, castCount) => (castCount || 0) >= 5, target: 5, reward: "✨ 金色鱼漂", useCastCount: true },
+            { text: "钓到 1 个食物（如🍔🍕🍦等）", check: (catches) => catches.filter(c => ['汉堡', '薯条', '披萨', '冰激凌', '甜甜圈', '饼干', '爆米花', '杯子蛋糕', '蛋糕', '布丁'].includes(c.name)).length >= 1, target: 1, reward: "✨ 金色鱼漂" },
+            { text: "钓到 1 个电子设备（如📱⌚等）", check: (catches) => catches.filter(c => ['手机', '电脑', '手表', '相机', '耳机'].includes(c.name)).length >= 1, target: 1, reward: "✨ 金色鱼漂" },
+            { text: "钓到 3 个海洋生物（不重复）", check: (catches) => { const marine = catches.filter(c => ['鲸鱼', '海豚', '蓝鲸', '鲨鱼', '章鱼', '鱿鱼', '龙虾', '螃蟹'].includes(c.name)); return new Set(marine.map(m => m.name)).size >= 3; }, target: 3, reward: "✨ 金色鱼漂" },
+            { text: "钓到 2 个水果（不重复）", check: (catches) => { const fruits = catches.filter(c => ['苹果', '梨', '橘子', '柠檬', '香蕉', '西瓜', '葡萄', '草莓', '猕猴桃', '椰子', '樱桃', '桃子', '芒果', '菠萝'].includes(c.name)); return new Set(fruits.map(f => f.name)).size >= 2; }, target: 2, reward: "✨ 金色鱼漂" }
+        ];
+
+        function initDailyChallenge() {
+            const randomIndex = Math.floor(Math.random() * dailyChallenges.length);
+            gameState.dailyChallenge = dailyChallenges[randomIndex];
+            gameState.challengeProgress = { current: 0, completed: false };
+            updateDailyChallenge();
+        }
+
+        function updateDailyChallenge() {
+            if (!gameState.dailyChallenge) return;
+            const progress = gameState.dailyChallenge.check(gameState.catches) ? gameState.dailyChallenge.target : 
+                Math.min(gameState.dailyChallenge.target - 1, countChallengeProgress());
+            const percent = Math.min(100, (progress / gameState.dailyChallenge.target) * 100);
+            const rewardText = gameState.dailyChallenge.reward ? `<br>(奖励: ${gameState.dailyChallenge.reward})` : '';
+            challengeText.innerHTML = gameState.dailyChallenge.text + rewardText;
+            challengeBar.style.width = percent + '%';
+            if (percent >= 100 && !gameState.challengeProgress.completed) {
+                gameState.challengeProgress.completed = true;
+                if (!gameState.hasGoldenBobber) {
+                    gameState.hasGoldenBobber = true;
+                    saveGameData();
+                    updateGoldenBobberButton();
+                    showToast("🎉 每日挑战完成！获得金色鱼漂 ×1！", "success");
+                } else {
+                    showToast("🎉 每日挑战完成！", "success");
+                }
+            }
+        }
+
+        function countChallengeProgress() {
+            if (!gameState.dailyChallenge) return 0;
+            const catches = gameState.catches;
+            const challenge = gameState.dailyChallenge;
+            if (challenge.text.includes("3 条鱼")) return catches.filter(c => c.category === 'fish').length;
+            if (challenge.text.includes("5 种水果")) {
+                const fruits = catches.filter(c => c.category === 'food');
+                return new Set(fruits.map(f => f.name)).size;
+            }
+            if (challenge.text.includes("鞋子")) return catches.filter(c => c.name === '运动鞋' || c.name === '靴子').length;
+            if (challenge.text.includes("3 件不同物品")) return new Set(catches.map(c => c.name)).size;
+            if (challenge.text.includes("传说")) return catches.filter(c => c.rarity === 'legendary').length;
+            if (challenge.text.includes("海洋")) return catches.filter(c => ['鲸鱼', '海豚', '蓝鲸', '鲨鱼'].includes(c.name)).length;
+            if (challenge.text.includes("稀有")) return catches.filter(c => c.rarity === 'rare' || c.rarity === 'epic' || c.rarity === 'legendary').length;
+            return 0;
+        }
+
+        function changeWeather() {
+            const weathers = Object.keys(weatherTypes);
+            const currentIndex = weathers.indexOf(gameState.weather);
+            const nextIndex = (currentIndex + 1) % weathers.length;
+            gameState.weather = weathers[nextIndex];
+            weatherEmoji.textContent = weatherTypes[gameState.weather].emoji;
+            updateWeatherEffects();
+            saveGameData();
+            showWeatherBonus();
+            showToast(`天气变为 ${weatherTypes[gameState.weather].name}！`, "default");
+        }
+
+        function showWeatherBonus() {
+            const weather = weatherTypes[gameState.weather];
+            const bonusItems = weather.emojiBoost || [];
+            
+            let itemsHTML = '<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 15px 0;">';
+            for (const emoji of bonusItems) {
+                itemsHTML += `<span style="filter: grayscale(100%) brightness(0.8); font-size: 32px;">${emoji}</span>`;
+            }
+            itemsHTML += '</div>';
+            
+            const weatherBonusBody = document.getElementById('weatherBonusBody');
+            weatherBonusBody.innerHTML = `
+                <p style="font-size: 16px; margin-bottom: 10px;">${weather.name}到了！</p>
+                <p style="font-size: 14px; color: #666; margin-bottom: 5px;">以下物品出现概率提升</p>
+                ${itemsHTML}
+                <p style="font-size: 12px; color: #999; margin-top: 15px;">点击任意位置关闭</p>
+            `;
+            
+            const overlay = document.getElementById('weatherBonusOverlay');
+            overlay.classList.add('show');
+            
+            const closeWeatherBonus = () => {
+                overlay.classList.remove('show');
+                overlay.removeEventListener('click', closeWeatherBonus);
+            };
+            
+            overlay.addEventListener('click', closeWeatherBonus);
+        }
+
+        function updateWeatherEffects() {
+            weatherRain.innerHTML = '';
+            weatherSun.innerHTML = '';
+            weatherNight.innerHTML = '';
+            weatherCloudy.innerHTML = '';
+            
+            if (gameState.weather === 'rainy') {
+                for (let i = 0; i < 50; i++) {
+                    const drop = document.createElement('div');
+                    drop.className = 'rain-drop';
+                    drop.style.left = Math.random() * 100 + '%';
+                    drop.style.animationDuration = (0.5 + Math.random() * 0.5) + 's';
+                    drop.style.animationDelay = Math.random() * 2 + 's';
+                    weatherRain.appendChild(drop);
+                }
+            } else if (gameState.weather === 'sunny') {
+                const butterflyEmojis = ['🦋', '🦋', '🦋', '🐝'];
+                for (let i = 0; i < 2; i++) {
+                    const butterfly = document.createElement('div');
+                    butterfly.className = 'butterfly';
+                    butterfly.textContent = butterflyEmojis[i % butterflyEmojis.length];
+                    butterfly.style.top = (10 + Math.random() * 30) + '%';
+                    butterfly.style.animationDelay = (i * 1.5) + 's';
+                    butterfly.style.animationDuration = (6 + Math.random() * 4) + 's';
+                    weatherSun.appendChild(butterfly);
+                }
+            } else if (gameState.weather === 'night') {
+                for (let i = 0; i < 20; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'night-star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = (5 + Math.random() * 40) + '%';
+                    star.style.animationDelay = Math.random() * 2 + 's';
+                    weatherNight.appendChild(star);
+                }
+                for (let i = 0; i < 15; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'night-sparkle';
+                    sparkle.style.left = (10 + Math.random() * 80) + '%';
+                    sparkle.style.top = (10 + Math.random() * 70) + '%';
+                    sparkle.style.width = (15 + Math.random() * 25) + 'px';
+                    sparkle.style.height = sparkle.style.width;
+                    sparkle.style.animationDelay = Math.random() * 4 + 's';
+                    weatherNight.appendChild(sparkle);
+                }
+                for (let i = 0; i < 8; i++) {
+                    const firefly = document.createElement('div');
+                    firefly.className = 'firefly';
+                    firefly.style.left = (10 + Math.random() * 80) + '%';
+                    firefly.style.top = (20 + Math.random() * 60) + '%';
+                    firefly.style.animationDelay = Math.random() * 6 + 's';
+                    firefly.style.animationDuration = (4 + Math.random() * 4) + 's';
+                    weatherNight.appendChild(firefly);
+                }
+                const moon = document.createElement('div');
+                moon.className = 'moon-reflection';
+                weatherNight.appendChild(moon);
+            } else if (gameState.weather === 'cloudy') {
+                const cloudEmojis = ['☁️', '☁️', '🌥️', '⛅'];
+                for (let i = 0; i < 5; i++) {
+                    const cloud = document.createElement('div');
+                    cloud.className = 'cloud cloud-' + (i + 1);
+                    cloud.textContent = cloudEmojis[i % cloudEmojis.length];
+                    weatherCloudy.appendChild(cloud);
+                }
+            }
+        }
+
+        function showToast(message, type = "default") {
+            toast.textContent = message;
+            toast.className = "toast show " + type;
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2500);
+        }
+
+        function updateGoldenBobberButton() {
+            if (gameState.hasGoldenBobber) {
+                goldenBobberBtn.style.display = "flex";
+            } else {
+                goldenBobberBtn.style.display = "none";
+                goldenBobberBtn.classList.remove("active");
+                bobber.classList.remove("golden");
+                gameState.goldenBobberActive = false;
+            }
+        }
+
+        function updateBasketCount() {
+            basketCount.textContent = gameState.catches.length;
+        }
+
+        function getRandomItem() {
+            let items = fishItems.map(item => {
+                let weight = item.weight;
+                if (gameState.goldenBobberActive && (item.rarity === 'epic' || item.rarity === 'legendary')) {
+                    weight = 1000;
+                } else if (gameState.goldenBobberActive) {
+                    weight = 0.1;
+                }
+                if (item.weatherBoost && item.weatherBoost.includes(gameState.weather)) {
+                    weight *= 2;
+                }
+                return { ...item, adjustedWeight: weight };
+            });
+            
+            const totalWeight = items.reduce((sum, item) => sum + item.adjustedWeight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (const item of items) {
+                random -= item.adjustedWeight;
+                if (random <= 0) {
+                    return item;
+                }
+            }
+            return fishItems[0];
+        }
+
+        function castLine() {
+            gameState.phase = "casting";
+            gameState.castCount++;
+            castBtn.disabled = true;
+            reelBtn.disabled = true;
+            
+            statusText.textContent = "抛竿中...";
+            
+            bobber.classList.remove("biting");
+            bobber.classList.add("idle");
+            bobber.style.display = "block";
+            bobber.style.top = "48%";
+            bobber.style.opacity = "0";
+            
+            setTimeout(() => {
+                bobber.style.transition = "all 0.5s ease-out";
+                bobber.style.top = "55%";
+                bobber.style.opacity = "1";
+            }, 50);
+            
+            setTimeout(() => {
+                gameState.phase = "waiting_bite";
+                statusText.textContent = "等待鱼儿上钩...";
+                reelBtn.disabled = true;
+                
+                const waitTime = 1500 + Math.random() * 8500;
+                gameState.biteTimer = setTimeout(() => {
+                    triggerBite();
+                }, waitTime);
+            }, 800);
+        }
+
+        function triggerBite() {
+            if (gameState.phase !== "waiting_bite") return;
+            
+            gameState.phase = "biting";
+            bobber.classList.remove("idle");
+            bobber.classList.add("biting");
+            
+            statusText.textContent = "🐟 有鱼上钩了！快提竿！";
+            reelBtn.disabled = false;
+            
+            gameState.reelTimer = setTimeout(() => {
+                if (gameState.phase === "biting") {
+                    failCatch();
+                }
+            }, 2500);
+        }
+
+        function reelLine() {
+            if (gameState.phase !== "biting") {
+                if (gameState.phase === "waiting_bite") {
+                    showToast("还没有鱼上钩呢", "warning");
+                }
+                return;
+            }
+            
+            if (gameState.castCount === 3) {
+                gameState.phase = "reeling";
+                reelBtn.disabled = true;
+                showEasterEgg();
+                return;
+            }
+            
+            clearTimeout(gameState.reelTimer);
+            
+            gameState.phase = "reeling";
+            reelBtn.disabled = true;
+            
+            const caughtItem = getRandomItem();
+            
+            if (caughtItem.specialType === "bomb") {
+                showBombEffect();
+                return;
+            }
+            
+            if (caughtItem.specialType === "ghost") {
+                showGhostEffect();
+                return;
+            }
+            
+            gameState.catches.push({
+                ...caughtItem,
+                time: Date.now(),
+                weather: gameState.weather
+            });
+            
+            gameState.collection.add(caughtItem.emoji + caughtItem.name);
+            
+            updateDailyChallenge();
+            showBigCatch(caughtItem);
+        }
+
+        function showEasterEgg() {
+            bigCatchEmoji.textContent = "👧";
+            bigCatchText.innerHTML = `恭喜你，居然钓到了.....<br>作者！👧`;
+            
+            bigCatchRarity.textContent = "彩蛋";
+            bigCatchRarity.style.background = "linear-gradient(135deg, #ff6b6b, #feca57)";
+            bigCatchRarity.style.boxShadow = "0 0 20px rgba(255, 107, 107, 0.5)";
+            
+            bigCatchOverlay.classList.add("show");
+            
+            const closeEasterEgg = () => {
+                bigCatchOverlay.classList.remove("show");
+                bigCatchOverlay.removeEventListener("click", closeEasterEgg);
+                resetGame();
+                showToast("但她表示不想进你的鱼筐...", "default");
+            };
+            
+            bigCatchOverlay.addEventListener("click", closeEasterEgg);
+        }
+
+        function showBigCatch(item) {
+            bigCatchEmoji.textContent = item.emoji;
+            bigCatchText.textContent = `你钓到了 ${item.name}！`;
+            
+            const rarity = rarityConfig[item.rarity] || rarityConfig.common;
+            bigCatchRarity.textContent = rarity.label;
+            bigCatchRarity.style.background = rarity.color;
+            bigCatchRarity.style.boxShadow = rarity.glow;
+            
+            bigCatchOverlay.classList.add("show");
+            
+            updateBasketCount();
+            updateCollectionProgress();
+            
+            const closeBigCatch = () => {
+                bigCatchOverlay.classList.remove("show");
+                bigCatchOverlay.removeEventListener("click", closeBigCatch);
+                resetGame();
+                showToast(`${item.name} 已收入鱼筐`, "success");
+            };
+            
+            bigCatchOverlay.addEventListener("click", closeBigCatch);
+        }
+
+        function showBombEffect() {
+            bombEffect.classList.add("show");
+            
+            setTimeout(() => {
+                bombEffect.classList.remove("show");
+                resetGame();
+                showToast("💣 炸弹爆炸！本次钓鱼失败！", "error");
+            }, 1500);
+        }
+
+        function showGhostEffect() {
+            ghostEffect.classList.add("show");
+            
+            setTimeout(() => {
+                ghostEffect.classList.remove("show");
+                resetGame();
+                showToast("👻 幽灵捣乱！本次钓鱼失败！", "error");
+            }, 2000);
+        }
+
+        function failCatch() {
+            gameState.phase = "failed";
+            bobber.classList.remove("biting");
+            bobber.classList.add("idle");
+            
+            statusText.textContent = "鱼跑掉了… 重新抛竿吧";
+            reelBtn.disabled = true;
+            
+            showToast("鱼跑掉了… 重新抛竿吧", "error");
+            
+            setTimeout(() => {
+                resetGame();
+            }, 1500);
+        }
+
+        function resetGame() {
+            gameState.phase = "waiting";
+            
+            bobber.style.display = "none";
+            bobber.classList.remove("biting", "idle", "golden");
+            
+            castBtn.disabled = false;
+            reelBtn.disabled = true;
+            
+            if (gameState.goldenBobberActive) {
+                gameState.goldenBobberActive = false;
+                goldenBobberBtn.classList.remove("active");
+            }
+            
+            statusText.textContent = "点击「抛竿」开始钓鱼";
+        }
+
+        function openJournal() {
+            const totalItems = fishItems.length;
+            const collectedCount = gameState.collection.size;
+            const progressPercent = Math.round((collectedCount / totalItems) * 100);
+            
+            const rarityOrder = ['legendary', 'epic', 'rare', 'common'];
+            const rarityNames = {
+                legendary: { name: '👑 传说', class: 'legendary' },
+                epic: { name: '✨ 史诗', class: 'epic' },
+                rare: { name: '⭐ 稀有', class: 'rare' },
+                common: { name: '🌟 普通', class: 'common' }
+            };
+            
+            let journalHTML = `
+                <div class="journal-header" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #eee;">
+                    <span style="font-size: 18px; font-weight: bold;">📖 图鉴收藏</span>
+                    <span class="journal-progress" style="font-size: 16px; color: #3498db; font-weight: bold;">${progressPercent}% (${collectedCount}/${totalItems})</span>
+                </div>
+            `;
+            
+            for (const rarity of rarityOrder) {
+                const itemsOfRarity = fishItems.filter(item => item.rarity === rarity);
+                const collectedInRarity = itemsOfRarity.filter(item => gameState.collection.has(item.emoji + item.name));
+                const uncollectedInRarity = itemsOfRarity.filter(item => !gameState.collection.has(item.emoji + item.name));
+                
+                const sortedCollected = collectedInRarity.sort((a, b) => {
+                    const aTime = Math.max(...gameState.catches.filter(c => c.name === a.name).map(c => c.time || 0));
+                    const bTime = Math.max(...gameState.catches.filter(c => c.name === b.name).map(c => c.time || 0));
+                    return bTime - aTime;
+                });
+                
+                const sectionInfo = rarityNames[rarity];
+                
+                journalHTML += `
+                    <div class="journal-section">
+                        <div class="journal-section-title ${sectionInfo.class}">
+                            ${sectionInfo.name} (${collectedInRarity.length}/${itemsOfRarity.length})
+                        </div>
+                        <div class="journal-section-grid">
+                `;
+                
+                for (const item of sortedCollected) {
+                    const caughtCount = gameState.catches.filter(c => c.name === item.name).length;
+                    journalHTML += `
+                        <div class="journal-item">
+                            <span class="emoji">${item.emoji}</span>
+                            <span class="name">${item.name}</span>
+                            ${caughtCount > 0 ? `<span class="count">×${caughtCount}</span>` : ''}
+                        </div>
+                    `;
+                }
+                
+                for (const item of uncollectedInRarity) {
+                    journalHTML += `
+                        <div class="journal-item locked">
+                            <span class="emoji">${item.emoji}</span>
+                            <span class="name">？？？</span>
+                        </div>
+                    `;
+                }
+                
+                journalHTML += `</div></div>`;
+            }
+            
+            journalBody.innerHTML = journalHTML;
+            journalOverlay.classList.add("show");
+        }
+
+        function openBasket() {
+            if (gameState.catches.length === 0) {
+                modalBody.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-emoji">🎣</div>
+                        <div class="empty-state-text">还没有钓到任何东西</div>
+                    </div>
+                `;
+            } else {
+                const sortedCatches = [...gameState.catches].reverse();
+                
+                modalBody.innerHTML = `
+                    <div class="catch-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 12px;">
+                        ${sortedCatches.map(item => `
+                            <div class="catch-item" style="background: white; border-radius: 12px; padding: 12px 8px; text-align: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                                <span class="catch-item-emoji" style="font-size: 36px; display: block;">${item.emoji}</span>
+                                <div class="catch-item-name" style="font-size: 12px; color: #555; margin-top: 4px;">${item.name}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            modalOverlay.classList.add("show");
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove("show");
+        }
+
+        function closeJournal() {
+            journalOverlay.classList.remove("show");
+        }
+
+        function updateCollectionProgress() {
+            const totalItems = fishItems.length;
+            const collectedCount = gameState.collection.size;
+            const progressPercent = Math.round((collectedCount / totalItems) * 100);
+            collectionProgress.textContent = progressPercent + '%';
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove("show");
+        }
+
+        function closeJournal() {
+            journalOverlay.classList.remove("show");
+        }
+
+        castBtn.addEventListener("click", castLine);
+        reelBtn.addEventListener("click", reelLine);
+        bobber.addEventListener("click", reelLine);
+        basket.addEventListener("click", openBasket);
+        collectionBtn.addEventListener("click", openJournal);
+        journalClose.addEventListener("click", closeJournal);
+        modalClose.addEventListener("click", closeModal);
+        weatherDisplay.addEventListener("click", changeWeather);
+        
+        goldenBobberBtn.addEventListener("click", () => {
+            if (!gameState.hasGoldenBobber) return;
+            
+            gameState.goldenBobberActive = !gameState.goldenBobberActive;
+            
+            if (gameState.goldenBobberActive) {
+                goldenBobberBtn.classList.add("active");
+                bobber.classList.add("golden");
+                showToast("✨ 金色鱼漂（必出史诗/传说）", "success");
+            } else {
+                goldenBobberBtn.classList.remove("active");
+                bobber.classList.remove("golden");
+                showToast("金色鱼漂已关闭", "default");
+            }
+        });
+        
+        modalOverlay.addEventListener("click", (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+        journalOverlay.addEventListener("click", (e) => {
+            if (e.target === journalOverlay) {
+                closeJournal();
+            }
+        });
+
+        initDailyChallenge();
+        loadGameData();
+    </script>
+</body>
+</html>
