@@ -101,6 +101,18 @@
                 inset 0 -20px 60px rgba(0, 0, 0, 0.3);
         }
 
+        .stars {
+            display: none;
+        }
+
+        .moon {
+            display: none;
+        }
+
+        .clouds {
+            display: none;
+        }
+
         .sun-rays {
             position: absolute;
             top: -30%;
@@ -461,6 +473,28 @@
             border-top: 12px solid #f39c12;
         }
 
+        .bobber-emoji {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 65px;
+            z-index: 2;
+        }
+
+        .bobber.has-emoji .bobber-body {
+            display: none;
+        }
+
+        .bobber.has-emoji .bobber-emoji {
+            display: flex;
+        }
+
         .bobber.golden .bobber-body {
             background: radial-gradient(circle at 30% 70%, #ffd700 0%, #ffb300 70%, #ff8c00 100%);
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 4px 15px rgba(0, 0, 0, 0.4);
@@ -516,14 +550,14 @@
         }
 
         .btn {
-            padding: 16px 32px;
+            padding: 20px 40px;
             font-size: 18px;
             font-weight: bold;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
@@ -536,8 +570,18 @@
         }
 
         .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .btn-reel:disabled {
+            background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+            animation: reelBtnPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes reelBtnPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(231, 76, 60, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(231, 76, 60, 0.8); }
         }
 
         .btn-cast {
@@ -561,8 +605,8 @@
         .btn-golden {
             background: linear-gradient(180deg, #ffd700 0%, #ffb300 100%);
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
             font-size: 18px;
             display: flex;
@@ -570,11 +614,18 @@
             justify-content: center;
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
             animation: goldenPulse 1.5s ease-in-out infinite;
+            position: relative;
         }
 
         .btn-golden.active {
             background: linear-gradient(180deg, #ffed4a 0%, #ffd700 100%);
             box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
+        }
+
+        .btn-golden.disabled {
+            background: linear-gradient(180deg, #999 0%, #666 100%);
+            box-shadow: none;
+            animation: none;
         }
 
         @keyframes goldenPulse {
@@ -595,6 +646,24 @@
             align-items: center;
             cursor: pointer;
             z-index: 20;
+        }
+
+        .bobber-skin-btn {
+            position: fixed;
+            right: 95px;
+            bottom: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(180deg, #3498db, #2980b9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 20;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
             box-shadow: 0 4px 20px rgba(230, 126, 34, 0.5);
             transition: all 0.2s;
             border: 3px solid rgba(255, 255, 255, 0.3);
@@ -892,6 +961,98 @@
             transition: width 0.3s ease;
         }
 
+        .tasks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .task-card {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .task-label {
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .task-refresh-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+
+        .task-refresh-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .task-content {
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .task-progress {
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+            height: 6px;
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+
+        .task-progress-bar {
+            background: linear-gradient(90deg, #f1c40f, #2ecc71);
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .task-reward-btn {
+            width: 100%;
+            padding: 6px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #95a5a6, #7f8c8d);
+            color: #ccc;
+            font-size: 11px;
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+        }
+
+        .task-reward-btn.claimable {
+            background: linear-gradient(90deg, #f1c40f, #e67e22);
+            color: white;
+            cursor: pointer;
+            animation: rewardPulse 1s ease-in-out infinite;
+        }
+
+        .task-reward-btn.claimed {
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            color: white;
+            cursor: default;
+            animation: none;
+        }
+
+        @keyframes rewardPulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(241, 196, 15, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(241, 196, 15, 0.8); }
+        }
+
         .weather-display {
             position: absolute;
             top: 20px;
@@ -914,7 +1075,7 @@
         .collection-btn {
             position: absolute;
             top: 20px;
-            right: 100px;
+            right: 120px;
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             padding: 8px 14px;
@@ -938,6 +1099,184 @@
             border-radius: 10px;
             padding: 2px 8px;
             font-weight: bold;
+        }
+
+        .achievement-btn {
+            position: absolute;
+            top: 20px;
+            right: 70px;
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            z-index: 15;
+            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .achievement-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .achievement-modal {
+            max-height: 80vh;
+        }
+
+        .achievement-modal .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .bobber-skin-modal {
+            max-width: 400px;
+        }
+
+        .bobber-skin-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .bobber-skin-item {
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .bobber-skin-item:hover {
+            background: rgba(0,0,0,0.6);
+        }
+
+        .bobber-skin-item.active {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .bobber-skin-preview {
+            width: 60px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bobber-skin-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .bobber-skin-item.active .bobber-skin-name {
+            color: #fff;
+        }
+
+        .bobber-skin-check {
+            font-size: 18px;
+            color: #2ecc71;
+        }
+
+        .bobber-skin-item:not(.active) .bobber-skin-check {
+            display: none;
+        }
+
+        .achievement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .achievement-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .achievement-item.unlocked {
+            background: rgba(241, 196, 15, 0.2);
+            border: 2px solid rgba(241, 196, 15, 0.5);
+        }
+
+        .achievement-item.locked {
+            opacity: 0.7;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .achievement-icon {
+            font-size: 28px;
+        }
+
+        .achievement-name {
+            font-weight: bold;
+            color: #ffd700;
+            font-size: 16px;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .achievement-item.locked .achievement-name {
+            color: #999;
+        }
+
+        .achievement-condition {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            padding: 8px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        .achievement-condition span {
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .achievement-item.locked .achievement-condition span {
+            filter: grayscale(100%) brightness(0.8);
+            position: relative;
+        }
+
+        .achievement-item.locked .achievement-condition span::after {
+            content: '☁️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        .achievement-check {
+            font-size: 24px;
+        }
+
+        .achievement-item.locked .achievement-check {
+            display: none;
         }
 
         .journal-modal {
@@ -1362,8 +1701,16 @@
         }
 
         @media (max-width: 600px) {
+            html, body {
+                height: 100dvh;
+                overflow: hidden;
+                touch-action: manipulation;
+            }
+
             .game-container {
                 position: relative;
+                height: 100dvh;
+                overflow: hidden;
             }
 
             .pond-container {
@@ -1371,120 +1718,152 @@
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 70%;
+                height: 65%;
             }
 
             .pond-title {
                 font-size: 14px;
-                top: 50px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 100%;
-                text-align: center;
-                position: absolute;
-                z-index: 5;
-                white-space: nowrap;
+                top: 45px;
             }
 
             .status-bar {
-                position: absolute;
-                top: 80px;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 12px;
-                padding: 6px 16px;
-                z-index: 5;
-                white-space: nowrap;
+                top: 70px;
             }
 
             .controls {
                 position: absolute;
-                bottom: 12%;
+                bottom: 8%;
                 left: 50%;
                 transform: translateX(-50%);
                 display: flex;
                 gap: 8px;
                 z-index: 10;
                 width: auto;
+                padding: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+                max-width: 95%;
             }
 
             .btn-cast, .btn-reel {
-                padding: 12px 16px;
-                font-size: 14px;
-                min-width: 85px;
+                padding: 12px 20px;
+                font-size: 16px;
+                min-width: 90px;
+                min-height: 48px;
                 white-space: nowrap;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
             }
 
             .btn-golden {
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
-                min-width: 40px;
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+                min-width: 48px;
+                min-height: 48px;
                 padding: 0;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
             }
 
             .basket {
                 position: absolute;
-                width: 60px;
-                height: 60px;
-                right: 10px;
-                bottom: 12%;
+                width: 50px;
+                height: 50px;
+                right: 8px;
+                bottom: 8%;
             }
 
             .basket-icon {
-                font-size: 28px;
+                font-size: 24px;
             }
 
             .basket-count {
-                font-size: 12px;
+                font-size: 11px;
+            }
+
+            .bobber-skin-btn {
+                position: absolute;
+                width: 44px;
+                height: 44px;
+                right: 65px;
+                bottom: 8%;
+                font-size: 20px;
             }
 
             .daily-challenge {
                 position: absolute;
-                top: 8px;
-                left: 8px;
-                padding: 5px 8px;
+                top: 6px;
+                left: 6px;
+                padding: 4px 6px;
                 font-size: 9px;
-                max-width: 100px;
+                max-width: 90px;
                 z-index: 15;
             }
 
             .weather-display {
                 position: absolute;
-                top: 8px;
-                right: 8px;
-                padding: 6px 10px;
-                font-size: 16px;
+                top: 6px;
+                right: 6px;
+                padding: 5px 8px;
+                font-size: 14px;
                 z-index: 15;
                 width: auto;
                 height: auto;
             }
 
-            .journal-btn {
+            .collection-btn {
                 position: absolute;
-                top: 8px;
-                right: 60px;
-                width: 36px;
-                height: 36px;
-                font-size: 16px;
+                top: 6px;
+                right: 50px;
+                padding: 4px 8px;
+                font-size: 11px;
+                z-index: 15;
+            }
+
+            .achievement-btn {
+                position: absolute;
+                top: 6px;
+                right: 6px;
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
                 z-index: 15;
             }
 
             .bobber {
-                transform: scale(0.85);
+                transform: scale(0.7);
+            }
+
+            .bobber-emoji {
+                width: 40px;
+                height: 40px;
+                font-size: 45px;
+            }
+
+            .bobber-stem {
+                height: 25px;
+            }
+
+            .bobber-stem::before {
+                border-top-width: 8px;
+                border-left-width: 6px;
+                border-right-width: 6px;
+                bottom: -8px;
             }
 
             .weather-rain, .weather-sun, .weather-night, .weather-cloudy {
-                transform: scale(0.85);
+                transform: scale(0.7);
                 transform-origin: top left;
             }
 
             .big-catch-card {
-                padding: 25px 20px;
+                padding: 20px 15px;
+                max-width: 90%;
             }
 
             .big-catch-emoji {
-                font-size: 70px;
+                font-size: 48px;
             }
 
             .big-catch-text {
@@ -1528,14 +1907,14 @@
             }
 
             .controls {
-                bottom: 15px;
-                gap: 10px;
+                bottom: 20px;
+                gap: 15px;
             }
 
             .btn-cast, .btn-reel {
-                padding: 12px 20px;
-                font-size: 14px;
-                min-width: 80px;
+                padding: 16px 28px;
+                font-size: 16px;
+                min-width: 100px;
             }
 
             .basket {
@@ -1630,6 +2009,7 @@
             
             <div class="bobber" id="bobber">
                 <div class="bobber-body"></div>
+                <div class="bobber-emoji"></div>
                 <div class="bobber-stem"></div>
             </div>
         </div>
@@ -1646,13 +2026,36 @@
         <span class="basket-count" id="basketCount">0</span>
     </div>
 
+    <div class="bobber-skin-btn" id="bobberSkinBtn">
+        <span>🎣</span>
+    </div>
+
     <div class="daily-challenge" id="dailyChallenge">
         <div class="daily-challenge-title">
             <span>🎯</span> 每日挑战
         </div>
-        <div id="challengeText">加载中...</div>
-        <div class="daily-challenge-progress">
-            <div class="daily-challenge-progress-bar" id="challengeBar" style="width: 0%"></div>
+        <div class="tasks-container" id="tasksContainer">
+            <div class="task-card" id="task1">
+                <div class="task-header">
+                    <span class="task-label">任务1</span>
+                </div>
+                <div class="task-content" id="task1Content">加载中...</div>
+                <div class="task-progress">
+                    <div class="task-progress-bar" id="task1Bar" style="width: 0%"></div>
+                </div>
+                <button class="task-reward-btn" id="task1Reward" onclick="claimReward(1)">领取奖励</button>
+            </div>
+            <div class="task-card" id="task2">
+                <div class="task-header">
+                    <span class="task-label">任务2</span>
+                    <button class="task-refresh-btn" onclick="refreshTask2()">🔄</button>
+                </div>
+                <div class="task-content" id="task2Content">加载中...</div>
+                <div class="task-progress">
+                    <div class="task-progress-bar" id="task2Bar" style="width: 0%"></div>
+                </div>
+                <button class="task-reward-btn" id="task2Reward" onclick="claimReward(2)">领取奖励</button>
+            </div>
         </div>
     </div>
 
@@ -1663,6 +2066,10 @@
     <div class="collection-btn" id="collectionBtn">
         <span>📖</span>
         <span class="collection-progress" id="collectionProgress">0%</span>
+    </div>
+
+    <div class="achievement-btn" id="achievementBtn">
+        <span>🏆</span>
     </div>
 
     <div class="weather-rain" id="weatherRain"></div>
@@ -1709,6 +2116,28 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="achievementOverlay">
+        <div class="modal achievement-modal">
+            <div class="modal-header">
+                <span>🏆 成就</span>
+                <button class="modal-close" id="achievementClose">×</button>
+            </div>
+            <div class="modal-body" id="achievementBody">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="bobberSkinOverlay">
+        <div class="modal bobber-skin-modal">
+            <div class="modal-header">
+                <span>🎣 鱼漂皮肤</span>
+                <button class="modal-close" id="bobberSkinClose">×</button>
+            </div>
+            <div class="modal-body" id="bobberSkinBody">
+            </div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <div class="modal-header">
@@ -1740,6 +2169,38 @@
             night: { name: "夜晚", emoji: "🌙", emojiBoost: ["🌙", "⭐", "✨", "🌟", "🦇"] },
             cloudy: { name: "多云", emoji: "☁️", emojiBoost: ["☁️", "🦋", "🐦"] }
         };
+
+        const achievements = [
+            { name: "蒸蚌", items: ["🥕", "🧻", "🐱"] },
+            { name: "汤姆与杰瑞", items: ["🐱", "🐭"] },
+            { name: "比奇堡一家亲", items: ["🧽", "⭐", "🐙"] },
+            { name: "水果忍者", items: ["🍎", "🍌", "🍊"] },
+            { name: "龟兔赛跑", items: ["🐢", "🐰"] },
+            { name: "青蛙王子", items: ["🐸", "👸"] },
+            { name: "来自星星的你", items: ["🍺", "🍗"] },
+            { name: "万圣节之夜", items: ["💀", "👻"] },
+            { name: "德古拉", items: ["🦇", "🧛"] },
+            { name: "冰雪奇缘", items: ["⛄", "❄️"] },
+            { name: "生日快乐", items: ["🕯️", "🎂"] },
+            { name: "猴赛雷", items: ["🐒", "🍌"] },
+            { name: "小猪佩奇", items: ["🐷", "💩"] },
+            { name: "蜘蛛侠", items: ["🕷️", "🕸️"] },
+            { name: "复仇者集结", items: ["🕷️", "👗", "💀"] },
+            { name: "海王", items: ["🔱", "🧜‍♀️"] }
+        ];
+
+        let unlockedAchievements = JSON.parse(localStorage.getItem('unlockedAchievements') || '["水果忍者"]');
+        
+        const bobberSkins = [
+            { id: 'classic', name: '经典红白', emoji: '🔴', bodyColor: 'radial-gradient(circle at 30% 70%, #ff6b6b 0%, #c0392b 70%, #922b21 100%)', stemColor: '#333' },
+            { id: 'golden', name: '猫咪漂', emoji: '🐱', bodyColor: 'linear-gradient(180deg, #ffd700 0%, #ffb300 100%)', stemColor: '#b8860b' },
+            { id: 'watermelon', name: '西瓜漂', emoji: '🍉', bodyColor: 'radial-gradient(circle at 30% 30%, #90EE90 0%, #228B22 60%, #006400 100%)', stemColor: '#228B22' },
+            { id: 'carrot', name: '萝卜漂', emoji: '🥕', bodyColor: 'linear-gradient(180deg, #ff8c00 0%, #ff6600 100%)', stemColor: '#228B22' },
+            { id: 'ghost', name: '幽灵漂', emoji: '👻', bodyColor: 'radial-gradient(circle at 30% 70%, rgba(255,255,255,0.9) 0%, rgba(200,200,200,0.7) 70%, rgba(150,150,150,0.5) 100%)', stemColor: 'rgba(255,255,255,0.5)' },
+            { id: 'diamond', name: '钻石漂', emoji: '💎', bodyColor: 'radial-gradient(circle at 30% 30%, #87CEEB 0%, #4169E1 50%, #0000CD 100%)', stemColor: '#87CEEB' }
+        ];
+        
+        let currentSkin = localStorage.getItem('bobberSkin') || 'classic';
         
         const fishItems = [
             { emoji: "🐟", name: "小鱼", weight: 95, category: "fish", rarity: "common" },
@@ -2008,11 +2469,13 @@
             biteTimer: null,
             reelTimer: null,
             weather: "sunny",
-            dailyChallenge: null,
-            challengeProgress: {},
+            dailyTasks: [
+                { text: "提竿 1 次", target: 1, completed: false, claimed: false },
+                { text: "随机任务加载中...", target: 1, completed: false, claimed: false }
+            ],
             collection: new Set(),
             castCount: 0,
-            hasGoldenBobber: false,
+            goldenBobberCount: 0,
             goldenBobberActive: false
         };
 
@@ -2021,7 +2484,8 @@
                 catches: gameState.catches,
                 collection: Array.from(gameState.collection),
                 weather: gameState.weather,
-                hasGoldenBobber: gameState.hasGoldenBobber,
+                goldenBobberCount: gameState.goldenBobberCount,
+                dailyTasks: gameState.dailyTasks,
                 lastPlayed: Date.now()
             };
             localStorage.setItem('fishingGameData', JSON.stringify(data));
@@ -2035,12 +2499,31 @@
                     gameState.catches = data.catches || [];
                     gameState.collection = new Set(data.collection || []);
                     gameState.weather = data.weather || "sunny";
-                    gameState.hasGoldenBobber = data.hasGoldenBobber || false;
+                    gameState.goldenBobberCount = data.goldenBobberCount || 0;
+                    
+                    lastChallengeDate = localStorage.getItem('lastChallengeDate') || '';
+                    const today = new Date().toDateString();
+                    
+                    if (lastChallengeDate === today && data.dailyTasks) {
+                        gameState.dailyTasks = data.dailyTasks;
+                    } else {
+                        if (lastChallengeDate !== today) {
+                            const randomIndex = Math.floor(Math.random() * dailyChallenges.length);
+                            gameState.dailyTasks = [
+                                { text: "提竿 1 次", target: 1, completed: false, claimed: false },
+                                { ...dailyChallenges[randomIndex], completed: false, claimed: false }
+                            ];
+                            lastChallengeDate = today;
+                            localStorage.setItem('lastChallengeDate', today);
+                        }
+                    }
+                    
                     updateBasketCount();
                     updateCollectionProgress();
                     weatherEmoji.textContent = weatherTypes[gameState.weather].emoji;
                     updateWeatherEffects();
                     updateGoldenBobberButton();
+                    updateDailyTasksUI();
                 } catch (e) {
                     console.error('Failed to load game data:', e);
                 }
@@ -2064,6 +2547,14 @@
         const toast = document.getElementById("toast");
         
         const collectionBtn = document.getElementById("collectionBtn");
+        const achievementBtn = document.getElementById("achievementBtn");
+        const achievementOverlay = document.getElementById("achievementOverlay");
+        const achievementBody = document.getElementById("achievementBody");
+        const achievementClose = document.getElementById("achievementClose");
+        const bobberSkinBtn = document.getElementById("bobberSkinBtn");
+        const bobberSkinOverlay = document.getElementById("bobberSkinOverlay");
+        const bobberSkinBody = document.getElementById("bobberSkinBody");
+        const bobberSkinClose = document.getElementById("bobberSkinClose");
         const collectionProgress = document.getElementById("collectionProgress");
         const journalOverlay = document.getElementById("journalOverlay");
         const journalBody = document.getElementById("journalBody");
@@ -2098,50 +2589,102 @@
             { text: "钓到 3 个海洋生物（不重复）", check: (catches) => { const marine = catches.filter(c => ['鲸鱼', '海豚', '蓝鲸', '鲨鱼', '章鱼', '鱿鱼', '龙虾', '螃蟹'].includes(c.name)); return new Set(marine.map(m => m.name)).size >= 3; }, target: 3, reward: "✨ 金色鱼漂" },
             { text: "钓到 2 个水果（不重复）", check: (catches) => { const fruits = catches.filter(c => ['苹果', '梨', '橘子', '柠檬', '香蕉', '西瓜', '葡萄', '草莓', '猕猴桃', '椰子', '樱桃', '桃子', '芒果', '菠萝'].includes(c.name)); return new Set(fruits.map(f => f.name)).size >= 2; }, target: 2, reward: "✨ 金色鱼漂" }
         ];
+        let lastChallengeDate = localStorage.getItem('lastChallengeDate') || '';
 
         function initDailyChallenge() {
-            const randomIndex = Math.floor(Math.random() * dailyChallenges.length);
-            gameState.dailyChallenge = dailyChallenges[randomIndex];
-            gameState.challengeProgress = { current: 0, completed: false };
-            updateDailyChallenge();
+            updateDailyTasksUI();
         }
 
-        function updateDailyChallenge() {
-            if (!gameState.dailyChallenge) return;
-            const progress = gameState.dailyChallenge.check(gameState.catches) ? gameState.dailyChallenge.target : 
-                Math.min(gameState.dailyChallenge.target - 1, countChallengeProgress());
-            const percent = Math.min(100, (progress / gameState.dailyChallenge.target) * 100);
-            const rewardText = gameState.dailyChallenge.reward ? `<br>(奖励: ${gameState.dailyChallenge.reward})` : '';
-            challengeText.innerHTML = gameState.dailyChallenge.text + rewardText;
-            challengeBar.style.width = percent + '%';
-            if (percent >= 100 && !gameState.challengeProgress.completed) {
-                gameState.challengeProgress.completed = true;
-                if (!gameState.hasGoldenBobber) {
-                    gameState.hasGoldenBobber = true;
-                    saveGameData();
-                    updateGoldenBobberButton();
-                    showToast("🎉 每日挑战完成！获得金色鱼漂 ×1！", "success");
-                } else {
-                    showToast("🎉 每日挑战完成！", "success");
-                }
-            }
-        }
-
-        function countChallengeProgress() {
-            if (!gameState.dailyChallenge) return 0;
+        function getTaskProgress(taskText, target) {
             const catches = gameState.catches;
-            const challenge = gameState.dailyChallenge;
-            if (challenge.text.includes("3 条鱼")) return catches.filter(c => c.category === 'fish').length;
-            if (challenge.text.includes("5 种水果")) {
-                const fruits = catches.filter(c => c.category === 'food');
+            
+            if (taskText === "提竿 1 次") {
+                return Math.min(1, catches.length);
+            }
+            if (taskText.includes("5 条鱼")) return catches.filter(c => c.category === 'fish').length;
+            if (taskText.includes("3 种水果")) {
+                const fruits = catches.filter(c => ['苹果', '梨', '橘子', '柠檬', '香蕉', '西瓜', '葡萄', '草莓', '猕猴桃', '椰子', '樱桃', '桃子', '芒果', '菠萝'].includes(c.name));
                 return new Set(fruits.map(f => f.name)).size;
             }
-            if (challenge.text.includes("鞋子")) return catches.filter(c => c.name === '运动鞋' || c.name === '靴子').length;
-            if (challenge.text.includes("3 件不同物品")) return new Set(catches.map(c => c.name)).size;
-            if (challenge.text.includes("传说")) return catches.filter(c => c.rarity === 'legendary').length;
-            if (challenge.text.includes("海洋")) return catches.filter(c => ['鲸鱼', '海豚', '蓝鲸', '鲨鱼'].includes(c.name)).length;
-            if (challenge.text.includes("稀有")) return catches.filter(c => c.rarity === 'rare' || c.rarity === 'epic' || c.rarity === 'legendary').length;
+            if (taskText.includes("5 件不同物品")) return new Set(catches.map(c => c.name)).size;
+            if (taskText.includes("3 只海洋生物") && taskText.includes("不重复")) {
+                const marine = catches.filter(c => ['鲸鱼', '海豚', '蓝鲸', '鲨鱼', '章鱼', '鱿鱼', '龙虾', '螃蟹'].includes(c.name));
+                return new Set(marine.map(m => m.name)).size;
+            }
+            if (taskText.includes("3 只海洋生物")) return catches.filter(c => ['鲸鱼', '海豚', '蓝鲸', '鲨鱼', '章鱼', '鱿鱼', '龙虾', '螃蟹', '海螺', '乌龟'].includes(c.name)).length;
+            if (taskText.includes("2 件稀有物品")) return catches.filter(c => c.rarity === 'rare' || c.rarity === 'epic' || c.rarity === 'legendary').length;
+            if (taskText.includes("连续成功提竿")) return Math.min(3, catches.length);
+            if (taskText.includes("成功提竿 10 次")) return catches.length;
+            if (taskText.includes("1 个垃圾")) return catches.filter(c => ['运动鞋', '靴子', '瓶子', '塑料袋', '易拉罐', '纸杯'].includes(c.name)).length;
+            if (taskText.includes("雨天") && taskText.includes("2 条鱼")) return catches.filter(c => c.weather === 'rainy' && c.category === 'fish').length;
+            if (taskText.includes("夜晚") && taskText.includes("2 条鱼")) return catches.filter(c => c.weather === 'night' && c.category === 'fish').length;
+            if (taskText.includes("抛竿 5 次")) return gameState.castCount || 0;
+            if (taskText.includes("1 个食物")) return catches.filter(c => ['汉堡', '薯条', '披萨', '冰激凌', '甜甜圈', '饼干', '爆米花', '杯子蛋糕', '蛋糕', '布丁'].includes(c.name)).length;
+            if (taskText.includes("1 个电子设备")) return catches.filter(c => ['手机', '电脑', '手表', '相机', '耳机'].includes(c.name)).length;
+            if (taskText.includes("2 个水果")) {
+                const fruits = catches.filter(c => ['苹果', '梨', '橘子', '柠檬', '香蕉', '西瓜', '葡萄', '草莓', '猕猴桃', '椰子', '樱桃', '桃子', '芒果', '菠萝'].includes(c.name));
+                return new Set(fruits.map(f => f.name)).size;
+            }
             return 0;
+        }
+
+        function updateDailyTasksUI() {
+            for (let i = 1; i <= 2; i++) {
+                const task = gameState.dailyTasks[i-1];
+                const progress = getTaskProgress(task.text, task.target);
+                const target = task.target;
+                const percent = Math.min(100, (progress / target) * 100);
+                
+                document.getElementById('task' + i + 'Content').innerHTML = task.text + ' (' + progress + '/' + target + ')';
+                document.getElementById('task' + i + 'Bar').style.width = percent + '%';
+                
+                const btn = document.getElementById('task' + i + 'Reward');
+                if (progress >= target && !task.claimed) {
+                    task.completed = true;
+                    btn.classList.add('claimable');
+                    btn.classList.remove('claimed');
+                    btn.textContent = '领取奖励';
+                } else if (task.claimed) {
+                    btn.classList.remove('claimable');
+                    btn.classList.add('claimed');
+                    btn.textContent = '已领取';
+                } else {
+                    btn.classList.remove('claimable', 'claimed');
+                    btn.textContent = '未完成';
+                }
+            }
+            saveGameData();
+        }
+
+        function refreshTask2() {
+            const task2 = gameState.dailyTasks[1];
+            if (task2.completed && !task2.claimed) {
+                if (!confirm('更换任务将丢失当前未领取的奖励，是否继续？')) {
+                    return;
+                }
+            }
+            
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * dailyChallenges.length);
+            } while (dailyChallenges[newIndex].text === gameState.dailyTasks[1].text);
+            
+            gameState.dailyTasks[1] = { ...dailyChallenges[newIndex], completed: false, claimed: false };
+            updateDailyTasksUI();
+            saveGameData();
+            showToast("任务2已刷新！", "default");
+        }
+
+        function claimReward(taskNum) {
+            const task = gameState.dailyTasks[taskNum-1];
+            if (!task.completed || task.claimed) return;
+            
+            task.claimed = true;
+            gameState.goldenBobberCount++;
+            saveGameData();
+            updateGoldenBobberButton();
+            updateDailyTasksUI();
+            showToast("🎉 获得金色鱼漂 ×1！", "success");
         }
 
         function changeWeather() {
@@ -2262,10 +2805,20 @@
         }
 
         function updateGoldenBobberButton() {
-            if (gameState.hasGoldenBobber) {
+            goldenBobberBtn.innerHTML = "✨<span style='position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;display:flex;align-items:center;justify-content:center;'>" + gameState.goldenBobberCount + "</span>";
+            
+            if (gameState.goldenBobberCount > 0) {
                 goldenBobberBtn.style.display = "flex";
+                goldenBobberBtn.style.opacity = "1";
+                goldenBobberBtn.style.cursor = "pointer";
+                goldenBobberBtn.title = "金色鱼漂 - 必出史诗/传说";
+                goldenBobberBtn.classList.remove("disabled");
             } else {
-                goldenBobberBtn.style.display = "none";
+                goldenBobberBtn.style.display = "flex";
+                goldenBobberBtn.style.opacity = "0.5";
+                goldenBobberBtn.style.cursor = "not-allowed";
+                goldenBobberBtn.title = "暂无金色鱼漂，完成每日挑战可获得";
+                goldenBobberBtn.classList.add("disabled");
                 goldenBobberBtn.classList.remove("active");
                 bobber.classList.remove("golden");
                 gameState.goldenBobberActive = false;
@@ -2325,7 +2878,7 @@
             setTimeout(() => {
                 gameState.phase = "waiting_bite";
                 statusText.textContent = "等待鱼儿上钩...";
-                reelBtn.disabled = true;
+                reelBtn.disabled = false;
                 
                 const waitTime = 1500 + Math.random() * 8500;
                 gameState.biteTimer = setTimeout(() => {
@@ -2352,10 +2905,17 @@
         }
 
         function reelLine() {
+            if (gameState.phase === "waiting" || gameState.phase === "casting") {
+                showToast("先抛竿才能提竿哦", "warning");
+                return;
+            }
+            
+            if (gameState.phase === "waiting_bite") {
+                showToast("还没有鱼上钩呢", "warning");
+                return;
+            }
+            
             if (gameState.phase !== "biting") {
-                if (gameState.phase === "waiting_bite") {
-                    showToast("还没有鱼上钩呢", "warning");
-                }
                 return;
             }
             
@@ -2391,7 +2951,8 @@
             
             gameState.collection.add(caughtItem.emoji + caughtItem.name);
             
-            updateDailyChallenge();
+            checkAchievements();
+            updateDailyTasksUI();
             showBigCatch(caughtItem);
         }
 
@@ -2464,6 +3025,13 @@
             bobber.classList.remove("biting");
             bobber.classList.add("idle");
             
+            if (gameState.goldenBobberActive) {
+                gameState.goldenBobberActive = false;
+                goldenBobberBtn.classList.remove("active");
+                bobber.classList.remove("golden");
+                showToast("金色鱼漂未消耗（跑鱼）", "default");
+            }
+            
             statusText.textContent = "鱼跑掉了… 重新抛竿吧";
             reelBtn.disabled = true;
             
@@ -2485,6 +3053,9 @@
             
             if (gameState.goldenBobberActive) {
                 gameState.goldenBobberActive = false;
+                gameState.goldenBobberCount--;
+                saveGameData();
+                updateGoldenBobberButton();
                 goldenBobberBtn.classList.remove("active");
             }
             
@@ -2593,6 +3164,115 @@
             journalOverlay.classList.remove("show");
         }
 
+        function openAchievement() {
+            renderAchievements();
+            achievementOverlay.classList.add("show");
+        }
+
+        function closeAchievement() {
+            achievementOverlay.classList.remove("show");
+        }
+
+        function openBobberSkin() {
+            renderBobberSkins();
+            bobberSkinOverlay.classList.add("show");
+        }
+
+        function closeBobberSkin() {
+            bobberSkinOverlay.classList.remove("show");
+        }
+
+        function renderBobberSkins() {
+            bobberSkinBody.innerHTML = '<div class="bobber-skin-grid"></div>';
+            const grid = bobberSkinBody.querySelector('.bobber-skin-grid');
+            
+            bobberSkins.forEach(skin => {
+                const isActive = currentSkin === skin.id;
+                const item = document.createElement('div');
+                item.className = 'bobber-skin-item' + (isActive ? ' active' : '');
+                
+                item.innerHTML = '<div class="bobber-skin-preview" style="font-size:36px;">' + skin.emoji + '</div>' +
+                    '<div class="bobber-skin-name">' + skin.name + '</div>' +
+                    '<div class="bobber-skin-check">✅</div>';
+                
+                item.onclick = () => selectBobberSkin(skin.id);
+                grid.appendChild(item);
+            });
+        }
+
+        function selectBobberSkin(skinId) {
+            currentSkin = skinId;
+            localStorage.setItem('bobberSkin', skinId);
+            renderBobberSkins();
+            applyBobberSkin();
+            showToast('已切换为 ' + bobberSkins.find(s => s.id === skinId).name, 'success');
+        }
+
+        function applyBobberSkin() {
+            const skin = bobberSkins.find(s => s.id === currentSkin);
+            if (!skin) return;
+            
+            const bobber = document.getElementById('bobber');
+            const bobberEmoji = bobber.querySelector('.bobber-emoji');
+            const bobberStem = bobber.querySelector('.bobber-stem');
+            
+            if (skin.id === 'classic') {
+                bobber.classList.remove('has-emoji');
+            } else {
+                bobber.classList.add('has-emoji');
+                if (bobberEmoji) bobberEmoji.textContent = skin.emoji;
+            }
+            
+            if (bobberStem) bobberStem.style.background = skin.stemColor;
+        }
+
+        function renderAchievements() {
+            achievementBody.innerHTML = '';
+            
+            achievements.forEach((achievement, index) => {
+                const isUnlocked = unlockedAchievements.includes(achievement.name);
+                const item = document.createElement('div');
+                item.className = 'achievement-item ' + (isUnlocked ? 'unlocked' : 'locked');
+                
+                let conditionHtml = '';
+                achievement.items.forEach(emoji => {
+                    const hasItem = gameState.collection.has(emoji);
+                    if (isUnlocked || hasItem) {
+                        conditionHtml += '<span>' + emoji + '</span>';
+                    } else {
+                        conditionHtml += '<span>❓</span>';
+                    }
+                });
+                
+                const icon = isUnlocked ? '🏆' : '🔒';
+                const check = isUnlocked ? '✅' : '';
+                item.innerHTML = '<div class="achievement-header">' +
+                    '<div class="achievement-icon">' + icon + '</div>' +
+                    '<div class="achievement-name">' + achievement.name + '</div>' +
+                    '<div class="achievement-check">' + check + '</div>' +
+                    '</div>' +
+                    '<div class="achievement-condition">' + conditionHtml + '</div>';
+                
+                achievementBody.appendChild(item);
+            });
+        }
+
+        function checkAchievements() {
+            const collectionEmojis = Array.from(gameState.collection);
+            
+            achievements.forEach(achievement => {
+                if (unlockedAchievements.includes(achievement.name)) return;
+                
+                const allItemsFound = achievement.items.every(item => collectionEmojis.includes(item));
+                
+                if (allItemsFound) {
+                    unlockedAchievements.push(achievement.name);
+                    localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+                    showToast("🎉 恭喜解锁成就：【" + achievement.name + "】", "success");
+                }
+            });
+        }
+
         function updateCollectionProgress() {
             const totalItems = fishItems.length;
             const collectedCount = gameState.collection.size;
@@ -2613,22 +3293,31 @@
         bobber.addEventListener("click", reelLine);
         basket.addEventListener("click", openBasket);
         collectionBtn.addEventListener("click", openJournal);
+        achievementBtn.addEventListener("click", openAchievement);
+        achievementClose.addEventListener("click", closeAchievement);
+        bobberSkinBtn.addEventListener("click", openBobberSkin);
+        bobberSkinClose.addEventListener("click", closeBobberSkin);
         journalClose.addEventListener("click", closeJournal);
         modalClose.addEventListener("click", closeModal);
         weatherDisplay.addEventListener("click", changeWeather);
         
         goldenBobberBtn.addEventListener("click", () => {
-            if (!gameState.hasGoldenBobber) return;
+            if (gameState.goldenBobberCount <= 0) {
+                showToast("暂无金色鱼漂，完成每日挑战可获得", "warning");
+                return;
+            }
             
             gameState.goldenBobberActive = !gameState.goldenBobberActive;
             
             if (gameState.goldenBobberActive) {
                 goldenBobberBtn.classList.add("active");
                 bobber.classList.add("golden");
-                showToast("✨ 金色鱼漂（必出史诗/传说）", "success");
+                bobber.classList.remove("has-emoji");
+                showToast("✨ 金色鱼漂已激活（必出史诗/传说）", "success");
             } else {
                 goldenBobberBtn.classList.remove("active");
                 bobber.classList.remove("golden");
+                applyBobberSkin();
                 showToast("金色鱼漂已关闭", "default");
             }
         });
@@ -2643,9 +3332,20 @@
                 closeJournal();
             }
         });
+        achievementOverlay.addEventListener("click", (e) => {
+            if (e.target === achievementOverlay) {
+                closeAchievement();
+            }
+        });
+        bobberSkinOverlay.addEventListener("click", (e) => {
+            if (e.target === bobberSkinOverlay) {
+                closeBobberSkin();
+            }
+        });
 
-        initDailyChallenge();
         loadGameData();
+        initDailyChallenge();
+        applyBobberSkin();
         
         window.addEventListener("beforeunload", () => {
             saveGameData();
