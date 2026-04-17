@@ -23,12 +23,426 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .intro-content {
+            font-size: 20px;
+            line-height: 2;
+            color: #fff;
+            text-align: center;
+            max-width: 600px;
+            min-height: 200px;
+        }
+
+        .intro-content p {
+            margin: 15px 0;
+            opacity: 0;
+            animation: fadeInLine 1s ease forwards;
+        }
+
+        @keyframes fadeInLine {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-skip {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            padding: 12px 24px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-skip:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .cat-game {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(180deg, #fff5e6 0%, #ffe4c4 50%, #ffdab9 100%);
+            z-index: 100;
+        }
+
+        .cat-header {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .hunger-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.8);
+            padding: 10px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .hunger-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #8b4513;
+            white-space: nowrap;
+        }
+
+        .hunger-bar {
+            flex: 1;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .hunger-bar.favor-bar {
+            background: #e0e0e0;
+        }
+
+        #favorFill {
+            background: linear-gradient(90deg, #ff9a9e, #fecfef, #f6d365);
+        }
+
+        .hunger-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .hunger-fill.low {
+            background: linear-gradient(90deg, #ff4757, #ff6b81);
+        }
+
+        .hunger-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #8b4513;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .cat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 200px;
+        }
+
+        .feed-effect {
+            position: absolute;
+            top: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #ff4757;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .feed-effect.active {
+            animation: feedPop 1s ease-out forwards;
+        }
+
+        @keyframes feedPop {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+        }
+
+        @keyframes heartFloat {
+            0% { opacity: 1; transform: translateY(0) scale(0.5); }
+            50% { opacity: 1; transform: translateY(-30px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1); }
+        }
+
+        @keyframes catRoll {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            50% { transform: rotate(-15deg); }
+            75% { transform: rotate(10deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-60px); }
+        }
+
+        .cat-name-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .cat-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn-edit-name {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .btn-edit-name:hover {
+            opacity: 1;
+        }
+
+        .cat-name-input {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            padding: 6px 12px;
+            border: 3px solid #ff9a9e;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe4e1 100%);
+            color: #ff6b6b;
+            outline: none;
+            box-shadow: 0 3px 8px rgba(255, 154, 158, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .cat-name-input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5);
+            transform: scale(1.02);
+        }
+
+        .cat-name-input::placeholder {
+            color: #ffb3b3;
+        }
+
+        .cat-emoji {
+            font-size: 150px;
+            animation: catBounce 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        @keyframes catBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes catJump {
+            0% { transform: translateY(0) scale(1); }
+            30% { transform: translateY(-30px) scale(1.1); }
+            60% { transform: translateY(-10px) scale(0.95); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .inventory {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .inventory-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #8b4513;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .inventory-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 60px;
+            justify-content: center;
+        }
+
+        .inventory-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: grab;
+            user-select: none;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .inventory-item:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+        }
+
+        .inventory-item .item-emoji {
+            font-size: 24px;
+        }
+
+        .inventory-item .item-count {
+            font-weight: bold;
+            color: #8b4513;
+        }
+
+        .inventory-item.dragging {
+            opacity: 0.5;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .inventory-empty {
+            color: #999;
+            font-size: 14px;
+            text-align: center;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .btn-fish {
+            margin-top: 15px;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(180deg, #5cb85c 0%, #449d44 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(92, 184, 92, 0.4);
+            transition: all 0.2s;
+        }
+
+        .btn-fish:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-fish:active {
+            transform: scale(0.98);
+        }
+
+        .fishing-game {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index: 50;
+        }
+
+        .fishing-game.active {
+            display: block;
+        }
+
+        .btn-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-story {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: linear-gradient(180deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+            transition: all 0.2s;
+        }
+
+        .btn-story:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 600px) {
+            .cat-game {
+                padding: 15px;
+            }
+
+            .cat-emoji {
+                font-size: 120px;
+            }
+
+            .hunger-bar-container {
+                padding: 8px 12px;
+            }
+
+            .hunger-label {
+                font-size: 12px;
+            }
+
+            .inventory {
+                padding: 10px;
+            }
+
+            .btn-fish {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+        }
+
         .game-container {
             width: 100%;
             height: 100%;
             position: relative;
             display: flex;
             flex-direction: column;
+        }
+
+        #fishingGame .game-container {
+            display: flex;
         }
 
         .status-bar {
@@ -301,11 +715,11 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 45%;
+            height: 35%;
             background: linear-gradient(180deg,
-                rgba(30, 80, 120, 0.6) 0%,
-                rgba(20, 60, 100, 0.8) 40%,
-                rgba(10, 40, 80, 0.95) 100%);
+                rgba(64, 164, 223, 0.7) 0%,
+                rgba(30, 100, 160, 0.85) 40%,
+                rgba(15, 60, 120, 0.95) 100%);
             border-radius: 0 0 45% 45% / 0 0 40% 40%;
         }
 
@@ -776,6 +1190,10 @@
             backdrop-filter: blur(5px);
         }
 
+        #storyOverlay {
+            z-index: 300;
+        }
+
         .modal-overlay.show {
             display: flex;
         }
@@ -794,6 +1212,11 @@
         @keyframes modalIn {
             0% { transform: translateY(50px) scale(0.9); opacity: 0; }
             100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes storyPopupIn {
+            0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
         }
 
         .modal-header {
@@ -920,7 +1343,7 @@
 
         .daily-challenge {
             position: absolute;
-            top: 20px;
+            top: 80px;
             left: 20px;
             background: linear-gradient(135deg, #8e44ad, #9b59b6);
             color: white;
@@ -1144,7 +1567,7 @@
         }
 
         .bobber-skin-item {
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.25);
             border-radius: 12px;
             padding: 16px;
             display: flex;
@@ -1157,7 +1580,7 @@
         }
 
         .bobber-skin-item:hover {
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.4);
         }
 
         .bobber-skin-item.active {
@@ -1793,7 +2216,7 @@
 
             .daily-challenge {
                 position: absolute;
-                top: 6px;
+                top: 80px;
                 left: 6px;
                 padding: 4px 6px;
                 font-size: 9px;
@@ -1924,7 +2347,7 @@
             }
 
             .daily-challenge {
-                top: 5px;
+                top: 75px;
                 left: 5px;
                 padding: 4px 6px;
                 font-size: 9px;
@@ -1977,68 +2400,119 @@
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="status-bar" id="statusText">点击「抛竿」开始钓鱼</div>
+    <div class="intro-overlay" id="introOverlay">
+        <div class="intro-content" id="introContent"></div>
+        <button class="btn-skip" id="btnSkip">跳过 >> </button>
+    </div>
 
-        <div class="pond-title">鱼塘之大，无奇不有</div>
+    <div class="cat-game" id="catGame">
+        <div id="storyPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 15, 35, 0.92); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(8px);">
+            <div style="background: linear-gradient(135deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 24px; width: 90%; max-width: 480px; max-height: 85vh; overflow-y: auto; padding: 30px; position: relative; box-shadow: 0 0 60px rgba(155, 89, 182, 0.4), 0 0 100px rgba(52, 152, 219, 0.2); border: 2px solid rgba(155, 89, 182, 0.3); animation: storyPopupIn 0.4s ease-out;">
+                <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); font-size: 40px;">🌟</div>
+                <button onclick="closeStory()" style="position: absolute; top: 15px; right: 15px; font-size: 28px; border: none; background: rgba(255,255,255,0.1); cursor: pointer; color: #fff; width: 36px; height: 36px; border-radius: 50%; transition: all 0.2s;">×</button>
+                <div id="storyContent" style="text-align: left; line-height: 1.9; font-size: 16px; color: #e8e8e8;"></div>
+                <div style="margin-top: 25px; text-align: center;">
+                    <button onclick="closeStory()" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); color: white; border: none; padding: 12px 40px; font-size: 16px; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4); transition: transform 0.2s;">开始游戏</button>
+                </div>
+            </div>
+        </div>
+        <div class="cat-header">
+            <div class="hunger-bar-container">
+                <div class="hunger-label">饥饿值</div>
+                <div class="hunger-bar">
+                    <div class="hunger-fill" id="hungerFill"></div>
+                </div>
+                <div class="hunger-value" id="hungerValue">60</div>
+            </div>
+            <div class="hunger-bar-container">
+                <div class="hunger-label">好感度</div>
+                <div class="hunger-bar favor-bar">
+                    <div class="hunger-fill" id="favorFill"></div>
+                </div>
+                <div class="hunger-value" id="favorValue">50</div>
+            </div>
+        </div>
 
-        <div class="pond">
-            <div class="pond-container">
-                <div class="sky-bg">
-                    <div class="sun-rays"></div>
-                    <div class="rainbow"></div>
-                    <div class="cloud cloud-1"></div>
-                    <div class="cloud cloud-2"></div>
-                    <div class="cloud cloud-3"></div>
-                    <div class="stars">
-                        <div class="star"></div>
-                        <div class="star"></div>
-                        <div class="star"></div>
-                        <div class="star"></div>
-                        <div class="star"></div>
-                        <div class="star"></div>
+        <div class="cat-area" id="catArea">
+            <div class="feed-effect" id="feedEffect">+8</div>
+            <div class="cat-name-container">
+                <span class="cat-name" id="catName">小猫咪</span>
+                <button class="btn-edit-name" id="btnEditName">✒️</button>
+            </div>
+            <input type="text" class="cat-name-input" id="catNameInput" maxlength="10" style="display: none;">
+            <div class="cat-emoji" id="catEmoji">😺</div>
+        </div>
+
+        <div class="inventory" id="inventory">
+            <div class="inventory-title">钓到的食物可以喂小猫哦</div>
+            <div class="inventory-items" id="inventoryItems"></div>
+        </div>
+
+        <button class="btn-fish" id="btnFish">🎣 去钓鱼</button>
+        <button class="btn-story" id="btnStory" onclick="showStory()">📖 故事</button>
+    </div>
+
+    <div class="fishing-game" id="fishingGame">
+        <button class="btn-back" id="btnBack">← 返回</button>
+
+        <div class="game-container">
+            <div class="status-bar" id="statusText">点击「抛竿」开始钓鱼</div>
+            <div class="pond-title">鱼塘之大，无奇不有</div>
+            <div class="pond">
+                <div class="pond-container">
+                    <div class="sky-bg">
+                        <div class="sun-rays"></div>
+                        <div class="rainbow"></div>
+                        <div class="cloud cloud-1"></div>
+                        <div class="cloud cloud-2"></div>
+                        <div class="cloud cloud-3"></div>
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <div class="sparkle"></div>
                     </div>
-                    <div class="sparkle"></div>
                     <div class="water-surface">
                         <div class="water-ripple"></div>
                         <div class="water-ripple"></div>
                         <div class="water-ripple"></div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="bobber" id="bobber">
-                <div class="bobber-body"></div>
-                <div class="bobber-emoji"></div>
-                <div class="bobber-stem"></div>
-            </div>
-        </div>
-
-        <div class="controls">
-            <button class="btn btn-cast" id="castBtn">🎣 抛竿</button>
-            <button class="btn btn-reel" id="reelBtn" disabled>⚡ 提竿</button>
-            <button class="btn btn-golden" id="goldenBobberBtn" style="display: none;">✨</button>
-        </div>
-    </div>
-
-    <div class="basket" id="basket">
-        <span class="basket-icon">🧺</span>
-        <span class="basket-count" id="basketCount">0</span>
-    </div>
-
-    <div class="bobber-skin-btn" id="bobberSkinBtn">
-        <span>🎣</span>
-    </div>
-
-    <div class="daily-challenge" id="dailyChallenge">
-        <div class="daily-challenge-title">
-            <span>🎯</span> 每日挑战
-        </div>
-        <div class="tasks-container" id="tasksContainer">
-            <div class="task-card" id="task1">
-                <div class="task-header">
-                    <span class="task-label">任务1</span>
+                <div class="bobber" id="bobber">
+                    <div class="bobber-body"></div>
+                    <div class="bobber-emoji"></div>
+                    <div class="bobber-stem"></div>
                 </div>
+            </div>
+            <div class="controls">
+                <button class="btn btn-cast" id="castBtn">🎣 抛竿</button>
+                <button class="btn btn-reel" id="reelBtn" disabled>⚡ 提竿</button>
+                <button class="btn btn-golden" id="goldenBobberBtn" style="display: none;">✨</button>
+            </div>
+        </div>
+
+        <div class="basket" id="basket">
+            <span class="basket-icon">🧺</span>
+            <span class="basket-count" id="basketCount">0</span>
+        </div>
+
+        <div class="bobber-skin-btn" id="bobberSkinBtn">
+            <span>🎣</span>
+        </div>
+
+        <div class="daily-challenge" id="dailyChallenge">
+            <div class="daily-challenge-title">
+                <span>🎯</span> 每日挑战
+            </div>
+            <div class="tasks-container" id="tasksContainer">
+                <div class="task-card" id="task1">
+                    <div class="task-header">
+                        <span class="task-label">任务1</span>
+                    </div>
                 <div class="task-content" id="task1Content">加载中...</div>
                 <div class="task-progress">
                     <div class="task-progress-bar" id="task1Bar" style="width: 0%"></div>
@@ -2153,9 +2627,87 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="storyOverlay">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <span>📖 星塘物语：小猫的钓鱼之旅</span>
+                <button class="modal-close" id="storyClose">×</button>
+            </div>
+            <div class="modal-body" id="storyBody" style="text-align: left; line-height: 1.8; font-size: 16px;">
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <script>
+        const introLines = [
+            { text: "在宇宙的某个角落，有一只叫'刀疤'的小猫咪，它的家园被一场突如其来的星际风暴摧毁了。", style: "color: #9b59b6; font-size: 22px;" },
+            { text: "", style: "" },
+            { text: "当它再次睁开眼时，发现自己漂浮在一个完全陌生的星球上——这里到处是发光的植物、漂浮的云朵，以及一个巨大、神秘、深不见底的池塘。", style: "color: #9b59b6; font-size: 22px;" },
+            { text: "", style: "" },
+            { text: "池塘的水面闪烁着彩虹般的光泽，水里的生物千奇百怪：有普通的鱼，有会发光的章鱼，甚至还有鞋子、手机、宝石、还有神灯！……", style: "color: #3498db; font-size: 22px;" },
+            { text: "", style: "" },
+            { text: "'这个池塘，好像什么都能钓上来？'", style: "color: #e67e22; font-style: italic; font-size: 24px;" },
+            { text: "", style: "" },
+            { text: "刀疤饿极了，它试着用尾巴卷起一根树枝，绑上藤蔓，做成了鱼竿。", style: "color: #9b59b6; font-size: 22px;" },
+            { text: "", style: "" },
+            { text: "就这样，刀疤的钓鱼生存之旅开始了.........", style: "color: #e74c3c; font-weight: bold; font-size: 24px;" }
+        ];
+
+        let introIndex = 0;
+        let introTimeout = null;
+        let hasSeenIntro = false;
+
+        function showIntroLine() {
+            if (introIndex >= introLines.length) {
+                finishIntro();
+                return;
+            }
+
+            const line = introLines[introIndex];
+            if (line.text === "") {
+                introIndex++;
+                showIntroLine();
+                return;
+            }
+
+            const p = document.createElement('p');
+            p.textContent = line.text;
+            p.style.cssText = line.style + " margin: 15px 0; opacity: 0; animation: fadeInLine 1s ease forwards;";
+            p.style.animationDelay = (introIndex * 0.1) + 's';
+            document.getElementById('introContent').appendChild(p);
+
+            introIndex++;
+            introTimeout = setTimeout(showIntroLine, 2500);
+        }
+
+        function finishIntro() {
+            setTimeout(() => {
+                document.getElementById('introOverlay').style.transition = 'opacity 0.5s';
+                document.getElementById('introOverlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('introOverlay').style.display = 'none';
+                }, 500);
+            }, 1500);
+        }
+
+        function skipIntro() {
+            if (introTimeout) clearTimeout(introTimeout);
+            finishIntro();
+        }
+
+        function initIntro() {
+            if (!hasSeenIntro) {
+                document.getElementById('btnSkip').addEventListener('click', skipIntro);
+                showIntroLine();
+            } else {
+                document.getElementById('introOverlay').style.display = 'none';
+            }
+        }
+
+        initIntro();
+
         const rarityConfig = {
             common: { name: "普通", color: "#a0a0a0", glow: "none", label: "N" },
             rare: { name: "稀有", color: "#3498db", glow: "0 0 10px #3498db", label: "R" },
@@ -2462,6 +3014,425 @@
             { emoji: "🎢", name: "过山车", weight: 18, category: "fun", rarity: "rare" },
             { emoji: "💒", name: "城堡", weight: 15, category: "fun", rarity: "epic" }
         ];
+
+        let catState = {
+            hunger: parseInt(localStorage.getItem('catHunger') || '60'),
+            favorability: parseInt(localStorage.getItem('catFavorability') || '50'),
+            name: localStorage.getItem('catName') || '小猫咪',
+            inventory: JSON.parse(localStorage.getItem('catInventory') || '{}'),
+            lastUpdate: parseInt(localStorage.getItem('catLastUpdate') || Date.now().toString())
+        };
+
+        let hungerTimer = null;
+
+        const fishAndFoodItems = [
+            "🐟", "🐠", "🐡", "🐋", "🐬", "🐳", "🐊", "🐢", "🐙", "🦑", "🦐", "🦞", "🦀", "🐚", "🦈",
+            "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🥝", "🥥", "🍒", "🍑", "🥭", "🍍", "🥑", "🥦", "🥕", "🌽", "🍆", "🥔", "🍞", "🥐", "🥯", "🥖", "🍕", "🍔", "🍟", "🌭", "🍿", "🍩", "🍪", "🎂", "🍦", "🍰", "🍮", "🍯", "🥨", "🌮", "🌯", "🥗", "🥘", "🍣", "🍱", "🍜", "🍲", "🍛", "🍢", "🍡", "🍧", "🧇", "🥞", "🍬", "🍭", "☕", "🧃", "🧋", "🍵", "🧶"
+        ];
+
+        function isFishOrFood(emoji) {
+            return fishAndFoodItems.includes(emoji);
+        }
+
+        function initCatGame() {
+            updateHungerDisplay();
+            renderInventory();
+            startHungerTimer();
+            updateCatNameDisplay();
+            
+            const catEmoji = document.getElementById('catEmoji');
+            catEmoji.addEventListener('click', petCat);
+            
+            const btnEditName = document.getElementById('btnEditName');
+            btnEditName.addEventListener('click', editCatName);
+            
+            const nameInput = document.getElementById('catNameInput');
+            nameInput.addEventListener('keydown', handleNameKeydown);
+            nameInput.addEventListener('blur', editCatName);
+        }
+        
+        function updateCatNameDisplay() {
+            document.getElementById('catName').textContent = catState.name;
+        }
+        
+        function editCatName() {
+            const nameSpan = document.getElementById('catName');
+            const nameInput = document.getElementById('catNameInput');
+            const btnEdit = document.getElementById('btnEditName');
+            
+            if (nameInput.style.display === 'none') {
+                nameInput.value = catState.name;
+                nameSpan.style.display = 'none';
+                nameInput.style.display = 'inline-block';
+                btnEdit.textContent = '✓';
+                nameInput.focus();
+                nameInput.select();
+            } else {
+                const newName = nameInput.value.trim();
+                if (newName !== '') {
+                    catState.name = newName.substring(0, 10);
+                    saveCatData();
+                    updateCatNameDisplay();
+                }
+                nameInput.style.display = 'none';
+                nameSpan.style.display = 'inline';
+                btnEdit.textContent = '✒️';
+            }
+        }
+        
+        function handleNameKeydown(e) {
+            if (e.key === 'Enter') {
+                editCatName();
+            }
+        }
+        
+        function petCat() {
+            const catEmoji = document.getElementById('catEmoji');
+            const increase = Math.floor(Math.random() * 3) + 1;
+            catState.favorability = Math.min(100, catState.favorability + increase);
+            
+            saveCatData();
+            updateHungerDisplay();
+            
+            const heart = document.createElement('div');
+            heart.textContent = '❤️ +' + increase;
+            heart.className = 'favor-heart';
+            heart.style.cssText = `
+                position: absolute;
+                left: 50%;
+                top: 20%;
+                transform: translateX(-50%);
+                font-size: 24px;
+                animation: floatUp 1s ease-out forwards;
+                pointer-events: none;
+                z-index: 100;
+            `;
+            
+            const catGame = document.getElementById('catGame');
+            catGame.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 1000);
+            
+            if (catState.favorability >= 80 && Math.random() > 0.6) {
+                catEmoji.style.animation = 'none';
+                catEmoji.offsetHeight;
+                catEmoji.style.animation = 'catRoll 0.5s ease';
+            }
+        }
+
+        function updateHungerDisplay() {
+            const hungerFill = document.getElementById('hungerFill');
+            const hungerValue = document.getElementById('hungerValue');
+            const favorFill = document.getElementById('favorFill');
+            const favorValue = document.getElementById('favorValue');
+            const catEmoji = document.getElementById('catEmoji');
+            
+            const hunger = Math.min(100, Math.max(0, catState.hunger));
+            const favorability = Math.min(100, Math.max(0, catState.favorability));
+            hungerFill.style.width = hunger + '%';
+            hungerValue.textContent = hunger;
+            favorFill.style.width = favorability + '%';
+            favorValue.textContent = favorability;
+            
+            let emoji;
+            const random = Math.random();
+            
+            if (hunger >= 70) {
+                if (favorability >= 70 && random > 0.5) {
+                    emoji = '😻';
+                } else if (random > 0.5) {
+                    emoji = '😸';
+                } else {
+                    emoji = '😺';
+                }
+            } else if (hunger >= 30) {
+                emoji = '🐱';
+            } else if (hunger > 10) {
+                emoji = random > 0.5 ? '😿' : '🙀';
+            } else {
+                emoji = '😾';
+            }
+            
+            catEmoji.textContent = emoji;
+            
+            if (hunger <= 20) {
+                hungerFill.classList.add('low');
+            } else {
+                hungerFill.classList.remove('low');
+            }
+        }
+
+        function startHungerTimer() {
+            if (hungerTimer) clearInterval(hungerTimer);
+            
+            const lastUpdate = parseInt(localStorage.getItem('catLastUpdate') || Date.now().toString());
+            const now = Date.now();
+            const dayPassed = Math.floor((now - lastUpdate) / (24 * 60 * 60 * 1000));
+            if (dayPassed > 0) {
+                catState.favorability = Math.max(0, catState.favorability - dayPassed * 30);
+                catState.lastUpdate = now;
+                saveCatData();
+            }
+            
+            hungerTimer = setInterval(() => {
+                if (catState.hunger > 0) {
+                    catState.hunger = Math.max(0, catState.hunger - 1);
+                    updateHungerDisplay();
+                    saveCatData();
+                }
+                
+                catState.favorability = Math.max(0, catState.favorability - 1);
+                updateHungerDisplay();
+                saveCatData();
+            }, 120000);
+        }
+
+        function feedCat(emoji) {
+            if (!catState.inventory[emoji] || catState.inventory[emoji] <= 0) return false;
+            
+            catState.inventory[emoji]--;
+            if (catState.inventory[emoji] <= 0) {
+                delete catState.inventory[emoji];
+            }
+            
+            const catEmoji = document.getElementById('catEmoji');
+            catEmoji.textContent = '😸';
+            catEmoji.style.animation = 'none';
+            catEmoji.offsetHeight;
+            catEmoji.style.animation = 'catJump 0.5s ease';
+            
+            showFeedHearts();
+            
+            setTimeout(() => {
+                updateHungerDisplay();
+            }, 500);
+            
+            if (emoji === '🧶') {
+                catState.favorability = 100;
+                showSpecialEffect('❤️ 好感度满满了！');
+            } else {
+                catState.hunger = Math.min(100, catState.hunger + 8);
+            }
+            
+            renderInventory();
+            saveCatData();
+            showFeedEffect();
+            
+            return true;
+        }
+
+        function showFeedHearts() {
+            const catArea = document.getElementById('catArea');
+            const heartCount = Math.floor(Math.random() * 3) + 3;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.textContent = '❤️';
+                heart.className = 'feed-heart';
+                heart.style.cssText = `
+                    position: absolute;
+                    left: ${30 + Math.random() * 40}%;
+                    top: 40%;
+                    font-size: ${20 + Math.random() * 15}px;
+                    animation: heartFloat 1s ease-out forwards;
+                    pointer-events: none;
+                    z-index: 50;
+                `;
+                
+                catArea.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 1000);
+            }
+        }
+
+        function showSpecialEffect(text) {
+            const effect = document.createElement('div');
+            effect.textContent = text;
+            effect.style.cssText = `
+                position: absolute;
+                left: 50%;
+                top: 30%;
+                transform: translateX(-50%);
+                font-size: 28px;
+                font-weight: bold;
+                color: #ff6b6b;
+                animation: floatUp 1s ease-out forwards;
+                pointer-events: none;
+                z-index: 100;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            `;
+            
+            const catGame = document.getElementById('catGame');
+            catGame.appendChild(effect);
+            
+            setTimeout(() => effect.remove(), 1000);
+        }
+
+        function showFeedEffect() {
+            const effect = document.getElementById('feedEffect');
+            effect.classList.remove('active');
+            effect.offsetHeight;
+            effect.classList.add('active');
+        }
+
+        function renderInventory() {
+            const container = document.getElementById('inventoryItems');
+            container.innerHTML = '';
+            
+            const items = Object.keys(catState.inventory);
+            if (items.length === 0) {
+                container.innerHTML = '<div class="inventory-empty">去钓鱼获得物品吧~</div>';
+                return;
+            }
+            
+            items.forEach(emoji => {
+                const count = catState.inventory[emoji];
+                const item = document.createElement('div');
+                item.className = 'inventory-item';
+                item.dataset.emoji = emoji;
+                item.innerHTML = '<span class="item-emoji">' + emoji + '</span><span class="item-count">x' + count + '</span>';
+                container.appendChild(item);
+            });
+            
+            initDragAndDrop();
+        }
+
+        function addItemToInventory(emoji) {
+            if (!isFishOrFood(emoji)) return;
+            
+            if (!catState.inventory[emoji]) {
+                catState.inventory[emoji] = 0;
+            }
+            catState.inventory[emoji]++;
+            saveCatData();
+        }
+
+        function saveCatData() {
+            localStorage.setItem('catHunger', catState.hunger);
+            localStorage.setItem('catFavorability', catState.favorability);
+            localStorage.setItem('catName', catState.name);
+            localStorage.setItem('catInventory', JSON.stringify(catState.inventory));
+            localStorage.setItem('catLastUpdate', Date.now().toString());
+        }
+
+        function initDragAndDrop() {
+            const items = document.querySelectorAll('.inventory-item');
+            const catArea = document.getElementById('catArea');
+            
+            items.forEach(item => {
+                item.addEventListener('mousedown', startDrag);
+                item.addEventListener('touchstart', startDrag, { passive: false });
+            });
+        }
+
+        let draggedItem = null;
+        let dragElement = null;
+
+        function startDrag(e) {
+            e.preventDefault();
+            const item = e.currentTarget;
+            draggedItem = item.dataset.emoji;
+            
+            dragElement = item.cloneNode(true);
+            dragElement.classList.add('dragging');
+            dragElement.style.position = 'fixed';
+            dragElement.style.pointerEvents = 'none';
+            dragElement.style.zIndex = '1000';
+            document.body.appendChild(dragElement);
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            moveDragElement(clientX, clientY);
+            
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('touchmove', onDrag, { passive: false });
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+        }
+
+        function onDrag(e) {
+            e.preventDefault();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            moveDragElement(clientX, clientY);
+        }
+
+        function moveDragElement(x, y) {
+            if (dragElement) {
+                dragElement.style.left = (x - 40) + 'px';
+                dragElement.style.top = (y - 20) + 'px';
+            }
+        }
+
+        function endDrag(e) {
+            const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+            const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+            
+            const catArea = document.getElementById('catArea');
+            const rect = catArea.getBoundingClientRect();
+            
+            if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+                if (draggedItem) {
+                    feedCat(draggedItem);
+                }
+            }
+            
+            if (dragElement) {
+                dragElement.remove();
+                dragElement = null;
+            }
+            draggedItem = null;
+            
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('touchmove', onDrag);
+            document.removeEventListener('mouseup', endDrag);
+            document.removeEventListener('touchend', endDrag);
+        }
+
+        function showFishingGame() {
+            document.getElementById('storyPopup').style.display = 'none';
+            document.getElementById('catGame').style.display = 'none';
+            document.getElementById('fishingGame').classList.add('active');
+        }
+
+        function showCatGame() {
+            document.getElementById('fishingGame').classList.remove('active');
+            document.getElementById('catGame').style.display = 'flex';
+            renderInventory();
+        }
+
+        function showStory() {
+            const storyText = `
+                <h2 style="font-size: 22px; color: #9b59b6; margin-bottom: 25px; text-align: center; text-shadow: 0 0 20px rgba(155, 89, 182, 0.5);">🌟 星塘物语：小猫的钓鱼之旅</h2>
+                
+                <p style="margin-bottom: 15px;">在宇宙的某个角落，有一只叫"刀疤"的小猫咪，它的家园被一场突如其来的星际风暴摧毁了。</p>
+                
+                <p style="margin-bottom: 15px;">当它再次睁开眼时，发现自己漂浮在一个完全陌生的星球上——这里到处是发光的植物、漂浮的云朵，以及一个巨大、神秘、深不见底的池塘。</p>
+                
+                <p style="color: #3498db; margin-bottom: 15px;">池塘的水面闪烁着彩虹般的光泽，水里的生物千奇百怪：有普通的鱼，有会发光的章鱼，甚至还有鞋子、手机、宝石、还有神灯！……</p>
+                
+                <p style="font-style: italic; color: #e67e22; font-size: 18px; margin: 20px 0; text-align: center;">"这个池塘，好像什么都能钓上来？"</p>
+                
+                <p style="margin-bottom: 15px;">刀疤饿极了，它试着用尾巴卷起一根树枝，绑上藤蔓，做成了鱼竿。</p>
+                
+                <p style="color: #e74c3c; font-weight: bold; font-size: 18px; margin-top: 20px;">就这样，刀疤的钓鱼生存之旅开始了。</p>
+                
+                <hr style="border: none; border-top: 1px dashed rgba(155, 89, 182, 0.3); margin: 25px 0;">
+                
+                <p><strong style="color: #9b59b6;">📖 池塘的来历：</strong></p>
+                <p style="margin-top: 8px;">据说是远古星兽留下的眼泪，汇聚了无数星球的碎片，所以里面什么都有。</p>
+                
+                <p style="margin-top: 20px;"><strong style="color: #3498db;">🎯 小猫的使命：</strong></p>
+                <p style="margin-top: 8px;">钓到足够的食物，让自己吃饱；同时收集池塘里的神奇物品，重建自己的家园。</p>
+            `;
+            
+            document.getElementById('storyContent').innerHTML = storyText;
+            document.getElementById('storyPopup').style.display = 'flex';
+        }
+
+        function closeStory() {
+            document.getElementById('storyPopup').style.display = 'none';
+        }
 
         let gameState = {
             phase: "waiting",
@@ -2871,7 +3842,7 @@
             
             setTimeout(() => {
                 bobber.style.transition = "all 0.5s ease-out";
-                bobber.style.top = "55%";
+                bobber.style.top = "60%";
                 bobber.style.opacity = "1";
             }, 50);
             
@@ -2950,6 +3921,8 @@
             });
             
             gameState.collection.add(caughtItem.emoji + caughtItem.name);
+            
+            addItemToInventory(caughtItem.emoji);
             
             checkAchievements();
             updateDailyTasksUI();
@@ -3346,6 +4319,15 @@
         loadGameData();
         initDailyChallenge();
         applyBobberSkin();
+        initCatGame();
+        
+        document.getElementById('btnFish').addEventListener('click', showFishingGame);
+        document.getElementById('btnBack').addEventListener('click', showCatGame);
+        document.getElementById('btnStory').addEventListener('click', showStory);
+        document.getElementById('storyClose').addEventListener('click', closeStory);
+        document.getElementById('storyOverlay').addEventListener('click', function(e) {
+            if (e.target.id === 'storyOverlay') closeStory();
+        });
         
         window.addEventListener("beforeunload", () => {
             saveGameData();
